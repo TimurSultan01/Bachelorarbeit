@@ -1,6 +1,6 @@
 # write solutions in a text file or something similiar
 
-def save_result(V, path1, path2, assign, edges, x_size, y_size, gridEdges, objective_value, flow, D, filename="results.txt"):
+def save_result(model, V, path1, path2, assign, edges, x_size, y_size, gridEdges, objective_value, flow, D, duration, filename="results.txt"):
     """
     Speichert die Ergebnisse (Objektivwert, Knoten, Pfade, Kanten, Knotenplatzierungen, verwendete Gittersegmente)
     in der Textdatei 'results.txt'. Jeder Aufruf hängt einen neuen Ergebnisblock an.
@@ -19,6 +19,11 @@ def save_result(V, path1, path2, assign, edges, x_size, y_size, gridEdges, objec
     with open(filename, "a") as file:
         file.write("=========================================\n")
         file.write("Ergebnisblock:\n")
+        file.write(f"Anzahl der Variablen: {model.NumVars}\n")
+        file.write(f"Anzahl der Nebenbedingungen: {model.NumConstrs}\n")
+        file.write(f"Anzahl der nicht-nullbaren Koeffizienten: {model.NumNZs}\n")
+        file.write(f"Dauer der Modellberechnung: {duration:.4f} Sekunden\n")
+        file.write("-" * 50 + "\n")
         file.write(f"Objektivwert: {objective_value}\n")
         file.write(f"Gittergröße: {x_size}, {y_size}\n")
         file.write("\nKnoten (V):\n")

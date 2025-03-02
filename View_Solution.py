@@ -82,5 +82,5 @@ def plot_solution(D, assign, flow, gridEdges, edges, V):
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
     ax.set_aspect('equal')
-    ax.set_title("Simultaneous Embedding Visualisierung (Richtungsunabhängig)")
+    ax.set_title("Simultaneous Embedding Visualisierung")
     plt.show()

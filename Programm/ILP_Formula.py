@@ -45,14 +45,14 @@ def create_ilp_formula(x_size, y_size, V, path1, path2):
 
     model = gp.Model("SimultaneousEmbedding")
 
-    # 2.1: Variablen für Knotenplatzierungen
+    # 2.1.1: Variablen für Knotenplatzierungen
     # Variable assign[v, p] = 1, wenn Knoten v auf Gitterpunkt p platziert wird.
     assign = {}
     for v in V:
         for p in D:
             assign[v, p] = model.addVar(vtype=GRB.BINARY, name=f"assign_{v}_{p}")
 
-    # 3.2: Flussvariablen für jede Kante und jede gerichtete Gitterkante
+    # 2.1.2: Flussvariablen für jede Kante und jede gerichtete Gitterkante
     # Variable flow[e, p, q] = 1, wenn im Pfad der Kantenfluss e das Gittersegment von p nach q genutzt wird.
     flow = {}
     for e in range(len(edges)):
@@ -62,17 +62,17 @@ def create_ilp_formula(x_size, y_size, V, path1, path2):
     # Aktualisiere das Modell, um die Variablen einzubinden
     model.update()
 
-    # 4. Nebenbedingungen (Constraints)
+    # 3. Nebenbedingungen (Constraints)
 
-    # 4.1: Jeder Knoten muss auf genau einem Gitterpunkt platziert werden.
+    # 3.1: Jeder Knoten muss auf genau einem Gitterpunkt platziert werden.
     for v in V:
         model.addConstr(quicksum(assign[v, p] for p in D) == 1, name=f"vertex_assign_{v}")
 
-    # 4.2: Kein Gitterpunkt darf von mehr als einem Knoten belegt werden.
+    # 3.2: Kein Gitterpunkt darf von mehr als einem Knoten belegt werden.
     for p in D:
         model.addConstr(quicksum(assign[v, p] for v in V) <= 1, name=f"gridpoint_unique_{p}")
 
-    # 4.3: Flusserhaltung für jeden Kantenfluss an jedem Gitterpunkt.
+    # 3.3: Flusserhaltung für jeden Kantenfluss an jedem Gitterpunkt.
     # Für eine Kante e = (u, v, ...):
     #   - An dem Gitterpunkt, wo u platziert wird, muss der Fluss +1 betragen.
     #   - An dem Gitterpunkt, wo v platziert wird, muss der Fluss -1 betragen.
@@ -92,7 +92,7 @@ def create_ilp_formula(x_size, y_size, V, path1, path2):
     # Big-M-Konstante (hier 2, da maximal 2 Flusseinheiten durch einen Zwischenpunkt fließen können)
     M = 2
 
-    # 4.4: Ein Fluss darf nicht über einen Gitterpunkt verlaufen, an dem ein anderer Knoten
+    # 3.4: Ein Fluss darf nicht über einen Gitterpunkt verlaufen, an dem ein anderer Knoten
     # (der nicht der Quell- oder Zielknoten dieser Kante ist) platziert wurde.
     for e in range(len(edges)):
         source, sink, path_id, edge_id = edges[e]
@@ -110,28 +110,10 @@ def create_ilp_formula(x_size, y_size, V, path1, path2):
                         name=f"no_pass_through_e{e}_p{p}_w{w}"
                     )
 
-    # 4.5: Nebenbedingungen zur Vermeidung von Selbstüberschneidungen innerhalb einer Kante:
-    # An einem Zwischenpunkt p (der weder Quell- noch Zielpunkt ist) darf der Fluss eines Kantenflusses e
-    # höchstens einmal eintreten und höchstens einmal austreten.
-    for e in range(len(edges)):
-        for p in D:
-            # Eingangsfluss an p für Kantenfluss e:
-            model.addConstr(
-                quicksum(flow[e, q, p] for (q, pp) in gridEdges if pp == p)
-                <= 1,
-                name=f"non_self_in_e{e}_p{p}"
-            )
-            # Ausgangsfluss an p für Kantenfluss e:
-            model.addConstr(
-                quicksum(flow[e, p, q] for (pp, q) in gridEdges if pp == p)
-                <= 1,
-                name=f"non_self_out_e{e}_p{p}"
-            )
-
     # Bestimme die in den Kanten auftretenden Pfad-IDs
     path_ids = set(e[2] for e in edges)
 
-    # 4.6: Aggregierte Nebenbedingung: Verhindern, dass mehrere Kanten des gleichen Pfades denselben
+    # 3.5: Aggregierte Nebenbedingung: Verhindern, dass mehrere Kanten des gleichen Pfades denselben
     # Gitterpunkt benutzen, falls dieser nicht als Knoten zugewiesen ist.
     for r in path_ids:
         for p in D:

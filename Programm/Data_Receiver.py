@@ -1,4 +1,4 @@
-# write solutions in a text file or something similiar
+# Schreibe Lösungen in eine Textdatei
 
 def save_result(model, V, path1, path2, assign, edges, x_size, y_size, gridEdges, objective_value, flow, D, duration, filename="results.txt"):
     """
@@ -51,7 +51,6 @@ def save_result(model, V, path1, path2, assign, edges, x_size, y_size, gridEdges
         for e in range(len(edges)):
             used_segments = []
             for (p, q) in gridEdges:
-                # Setze einen Toleranzwert (hier 0.5) für die Entscheidung
                 if flow[e, p, q].X > 0.5:
                     used_segments.append(f"{p} -> {q}")
             if used_segments:

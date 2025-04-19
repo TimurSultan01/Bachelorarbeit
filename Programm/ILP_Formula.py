@@ -1,4 +1,4 @@
-# build formula for problem
+# bilde das lineare ganzzählige Optimimierungsmodell
 
 import gurobipy as gp
 from gurobipy import GRB, quicksum
@@ -34,14 +34,14 @@ def create_ilp_formula(x_size, y_size, V, path1, path2):
             gridEdges.append(((x, y), (x, y - 1)))
 
     # Erzeuge eine Liste der Kanten für beide Pfade.
-    # Jede Kante wird als Tupel (Quelle, Senke, Pfad-ID, lokale Kanten-ID) definiert.
+    # Jede Kante wird als Tupel (Quelle, Ziel, Pfad-ID, lokale Kanten-ID) definiert.
     edges = []
     for i in range(len(path1) - 1):
         edges.append((path1[i], path1[i + 1], 1, i))
     for i in range(len(path2) - 1):
         edges.append((path2[i], path2[i + 1], 2, i))
 
-    # 2. Modell aufbauen
+    # 2. Variabeln für das Modell aufbauen
 
     model = gp.Model("SimultaneousEmbedding")
 

@@ -1,4 +1,4 @@
-# GUI for solutions
+# GUI für Lösungen
 import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use('TkAgg')

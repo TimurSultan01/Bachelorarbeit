@@ -42,22 +42,22 @@
   \node (p1) at (8,0) {};
 
 
-  \draw (a) edge[->, blue](b);
-  \draw (b) edge[->, blue](c);
-  \draw (c) edge[->, blue](d);
-  \draw (d) edge[->, blue](h);
-  \draw (h) edge[->, blue](l);
+  \draw (a) edge[->, violet](b);
+  \draw (b) edge[->, violet](c);
+  \draw (c) edge[->, violet](d);
+  \draw (d) edge[->, violet](h);
+  \draw (h) edge[->, violet](l);
   
-  \draw (k) edge[->, blue](j);
-  \draw (j) edge[->, blue](i);
-  \draw (i) edge[->, blue](e);
+  \draw (k) edge[->, violet](j);
+  \draw (j) edge[->, violet](i);
+  \draw (i) edge[->, violet](e);
 
-  \draw (a) edge[->, red](e);
-  \draw (e) edge[->, red](f);
-  \draw (f) edge[->, red](g);
-  \draw (g) edge[->, red](k);
-  \draw[->, red] (k) to[bend left=10] (l);
-\draw[->, blue] (l) to[bend left=10] (k);
+  \draw (a) edge[->, magenta](e);
+  \draw (e) edge[->, magenta](f);
+  \draw (f) edge[->, magenta](g);
+  \draw (g) edge[->, magenta](k);
+  \draw[->, magenta] (k) to[bend left=10] (l);
+\draw[->, violet] (l) to[bend left=10] (k);
 
   \draw (b) edge[-](f);
   \draw (c) edge[-](g);
@@ -82,23 +82,23 @@
   \draw (f1) edge[-](j1);
   \draw (b1) edge[-](f1);
   \draw (k1) edge[-](o1);
-  \draw (a1) edge[->, blue](b1);
-  \draw (b1) edge[->, blue](c1);
-  \draw (c1) edge[->, blue](g1);
-  \draw (g1) edge[->, blue](k1);
-  \draw (k1) edge[->, blue](l1);
-  \draw (l1) edge[->, blue](h1);
-  \draw (h1) edge[->, blue](g1);
-  \draw (g1) edge[->, blue](f1);
-  \draw (f1) edge[->, blue](e1);
+  \draw (a1) edge[->, violet](b1);
+  \draw (b1) edge[->, violet](c1);
+  \draw (c1) edge[->, violet](g1);
+  \draw (g1) edge[->, violet](k1);
+  \draw (k1) edge[->, violet](l1);
+  \draw (l1) edge[->, violet](h1);
+  \draw (h1) edge[->, violet](g1);
+  \draw (g1) edge[->, violet](f1);
+  \draw (f1) edge[->, violet](e1);
 
-  \draw (a1) edge[->, red](e1);
-  \draw (e1) edge[->, red](i1);
-  \draw (i1) edge[->, red](j1);
-  \draw (j1) edge[->, red](n1);
-  \draw (n1) edge[->, red](o1);
-  \draw (o1) edge[->, red](p1);
-  \draw (p1) edge[->, red](l1);
+  \draw (a1) edge[->, magenta](e1);
+  \draw (e1) edge[->, magenta](i1);
+  \draw (i1) edge[->, magenta](j1);
+  \draw (j1) edge[->, magenta](n1);
+  \draw (n1) edge[->, magenta](o1);
+  \draw (o1) edge[->, magenta](p1);
+  \draw (p1) edge[->, magenta](l1);
 
   \node[draw=none, fill=none, font=\small] at (1.5,-0.5) {(a) Erlaubte Zeichnung};
   \node[draw=none, fill=none, font=\small] at (6.5,-0.5) {(b) Verbotene Zeichnung};

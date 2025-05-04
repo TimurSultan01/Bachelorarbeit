@@ -1,0 +1,22 @@
+import matplotlib.pyplot as plt
+
+# Werte
+n_values = [5, 6, 7, 8, 9, 10, 11]
+variable_counts = [3380, 4200, 5020, 5840, 6660, 7480, 8300]
+constraint_counts = [3505, 5306, 7507, 10108, 13109, 16510, 20311]
+
+# Diagramm erstellen
+plt.figure(figsize=(10, 6))
+# Gitter 10 x 10
+plt.plot(n_values, variable_counts, marker='o', label='Anzahl Variablen', color='blue')
+plt.plot(n_values, constraint_counts, marker='s', label='Anzahl Nebenbedingungen', color='green')
+
+# Achsen und Titel
+plt.xlabel('Anzahl der Knoten (n)')
+plt.ylabel('Anzahl')
+plt.title('Anzahl der Variablen und Nebenbedingungen in Abhängigkeit von der Knotenzahl')
+plt.legend()
+plt.grid(True)
+
+# Anzeigen
+plt.show()

@@ -1,0 +1,24 @@
+import matplotlib.pyplot as plt
+
+# Gittergrößen
+grid_sizes = list(range(10, 105, 5))
+
+# Daten aus der vorherigen Berechnung
+num_variables = [15680, 36420, 65760, 103700, 150240, 205380, 269120, 341460, 422400, 511940,
+                 610080, 716820, 832160, 956100, 1088640, 1229780, 1379520, 1537860, 1704800]
+num_constraints = [72520, 163145, 290020, 453145, 652520, 888145, 1160020, 1468145, 1812520,
+                   2193145, 2610020, 3063145, 3552520, 4078145, 4640020, 5238145, 5872520, 6543145, 7250020]
+
+# Plot erstellen
+plt.figure(figsize=(10, 6))
+plt.plot(grid_sizes, num_variables, label='Anzahl Variablen', marker='o', color='blue')
+plt.plot(grid_sizes, num_constraints, label='Anzahl Nebenbedingungen', marker='o', color='green')
+
+# Achsenbeschriftung und Titel
+plt.xlabel('Gittergröße')
+plt.ylabel('Anzahl')
+plt.title('Anzahl Variablen und Nebenbedingungen bei 20 Knoten in verschiedenen Gittergrößen')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()

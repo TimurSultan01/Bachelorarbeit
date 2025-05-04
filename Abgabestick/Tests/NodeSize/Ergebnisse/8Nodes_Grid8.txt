@@ -1,0 +1,610 @@
+=========================================
+Ergebnisblock:
+Anzahl der Variablen: 3648
+Anzahl der Nebenbedingungen: 6472
+Anzahl der nicht-nullbaren Koeffizienten: 58368
+Dauer der Modellberechnung: 494.0174 Sekunden
+--------------------------------------------------
+Objektivwert: 26.0
+Gittergröße: 7, 7
+
+Knoten (V):
+[1, 2, 3, 4, 5, 6, 7, 8]
+
+Pfad 1:
+[3, 1, 2, 4, 6, 7, 8, 5]
+Pfad 2:
+[7, 1, 2, 5, 4, 6, 3, 8]
+
+Knotenplatzierungen:
+  Knoten 1 bei (1, 2)
+  Knoten 2 bei (1, 3)
+  Knoten 3 bei (1, 1)
+  Knoten 4 bei (2, 3)
+  Knoten 5 bei (0, 3)
+  Knoten 6 bei (3, 3)
+  Knoten 7 bei (2, 2)
+  Knoten 8 bei (1, 0)
+
+Kanten:
+  Kante: 3 -> 1, Pfad-ID: 1, lokale ID: 0
+  Kante: 1 -> 2, Pfad-ID: 1, lokale ID: 1
+  Kante: 2 -> 4, Pfad-ID: 1, lokale ID: 2
+  Kante: 4 -> 6, Pfad-ID: 1, lokale ID: 3
+  Kante: 6 -> 7, Pfad-ID: 1, lokale ID: 4
+  Kante: 7 -> 8, Pfad-ID: 1, lokale ID: 5
+  Kante: 8 -> 5, Pfad-ID: 1, lokale ID: 6
+  Kante: 7 -> 1, Pfad-ID: 2, lokale ID: 0
+  Kante: 1 -> 2, Pfad-ID: 2, lokale ID: 1
+  Kante: 2 -> 5, Pfad-ID: 2, lokale ID: 2
+  Kante: 5 -> 4, Pfad-ID: 2, lokale ID: 3
+  Kante: 4 -> 6, Pfad-ID: 2, lokale ID: 4
+  Kante: 6 -> 3, Pfad-ID: 2, lokale ID: 5
+  Kante: 3 -> 8, Pfad-ID: 2, lokale ID: 6
+
+Verwendete Gittersegmente pro Kante:
+  Für Kante 0: (1, 1) -> (1, 2)
+  Für Kante 1: (1, 2) -> (1, 3)
+  Für Kante 2: (1, 3) -> (2, 3)
+  Für Kante 3: (2, 3) -> (3, 3)
+  Für Kante 4: (3, 2) -> (2, 2), (3, 3) -> (3, 2)
+  Für Kante 5: (2, 0) -> (1, 0), (2, 1) -> (2, 0), (2, 2) -> (2, 1)
+  Für Kante 6: (0, 0) -> (0, 1), (0, 1) -> (0, 2), (0, 2) -> (0, 3), (1, 0) -> (0, 0)
+  Für Kante 7: (2, 2) -> (1, 2)
+  Für Kante 8: (1, 2) -> (1, 3)
+  Für Kante 9: (1, 3) -> (0, 3)
+  Für Kante 10: (0, 3) -> (0, 4), (0, 4) -> (1, 4), (1, 4) -> (2, 4), (2, 4) -> (2, 3)
+  Für Kante 11: (2, 3) -> (3, 3)
+  Für Kante 12: (2, 1) -> (1, 1), (3, 1) -> (2, 1), (3, 2) -> (3, 1), (3, 3) -> (3, 2)
+  Für Kante 13: (1, 1) -> (1, 0)
+=========================================
+
+=========================================
+Ergebnisblock:
+Anzahl der Variablen: 3648
+Anzahl der Nebenbedingungen: 6472
+Anzahl der nicht-nullbaren Koeffizienten: 58368
+Dauer der Modellberechnung: 113.4208 Sekunden
+--------------------------------------------------
+Objektivwert: 22.0
+Gittergröße: 7, 7
+
+Knoten (V):
+[1, 2, 3, 4, 5, 6, 7, 8]
+
+Pfad 1:
+[4, 8, 5, 3, 2, 7, 6, 1]
+Pfad 2:
+[8, 5, 1, 3, 7, 4, 6, 2]
+
+Knotenplatzierungen:
+  Knoten 1 bei (5, 6)
+  Knoten 2 bei (6, 5)
+  Knoten 3 bei (6, 6)
+  Knoten 4 bei (4, 5)
+  Knoten 5 bei (5, 7)
+  Knoten 6 bei (5, 5)
+  Knoten 7 bei (6, 4)
+  Knoten 8 bei (4, 7)
+
+Kanten:
+  Kante: 4 -> 8, Pfad-ID: 1, lokale ID: 0
+  Kante: 8 -> 5, Pfad-ID: 1, lokale ID: 1
+  Kante: 5 -> 3, Pfad-ID: 1, lokale ID: 2
+  Kante: 3 -> 2, Pfad-ID: 1, lokale ID: 3
+  Kante: 2 -> 7, Pfad-ID: 1, lokale ID: 4
+  Kante: 7 -> 6, Pfad-ID: 1, lokale ID: 5
+  Kante: 6 -> 1, Pfad-ID: 1, lokale ID: 6
+  Kante: 8 -> 5, Pfad-ID: 2, lokale ID: 0
+  Kante: 5 -> 1, Pfad-ID: 2, lokale ID: 1
+  Kante: 1 -> 3, Pfad-ID: 2, lokale ID: 2
+  Kante: 3 -> 7, Pfad-ID: 2, lokale ID: 3
+  Kante: 7 -> 4, Pfad-ID: 2, lokale ID: 4
+  Kante: 4 -> 6, Pfad-ID: 2, lokale ID: 5
+  Kante: 6 -> 2, Pfad-ID: 2, lokale ID: 6
+
+Verwendete Gittersegmente pro Kante:
+  Für Kante 0: (4, 5) -> (4, 6), (4, 6) -> (4, 7)
+  Für Kante 1: (4, 7) -> (5, 7)
+  Für Kante 2: (5, 7) -> (6, 7), (6, 7) -> (6, 6)
+  Für Kante 3: (6, 6) -> (6, 5)
+  Für Kante 4: (6, 5) -> (6, 4)
+  Für Kante 5: (5, 4) -> (5, 5), (6, 4) -> (5, 4)
+  Für Kante 6: (5, 5) -> (5, 6)
+  Für Kante 7: (4, 7) -> (5, 7)
+  Für Kante 8: (5, 7) -> (5, 6)
+  Für Kante 9: (5, 6) -> (6, 6)
+  Für Kante 10: (6, 6) -> (7, 6), (7, 4) -> (6, 4), (7, 5) -> (7, 4), (7, 6) -> (7, 5)
+  Für Kante 11: (4, 4) -> (4, 5), (5, 4) -> (4, 4), (6, 4) -> (5, 4)
+  Für Kante 12: (4, 5) -> (5, 5)
+  Für Kante 13: (5, 5) -> (6, 5)
+=========================================
+
+=========================================
+Ergebnisblock:
+Anzahl der Variablen: 3648
+Anzahl der Nebenbedingungen: 6472
+Anzahl der nicht-nullbaren Koeffizienten: 58368
+Dauer der Modellberechnung: 136.5208 Sekunden
+--------------------------------------------------
+Objektivwert: 23.0
+Gittergröße: 7, 7
+
+Knoten (V):
+[1, 2, 3, 4, 5, 6, 7, 8]
+
+Pfad 1:
+[1, 6, 8, 3, 7, 5, 2, 4]
+Pfad 2:
+[3, 6, 2, 1, 8, 7, 4, 5]
+
+Knotenplatzierungen:
+  Knoten 1 bei (2, 0)
+  Knoten 2 bei (3, 1)
+  Knoten 3 bei (2, 2)
+  Knoten 4 bei (4, 2)
+  Knoten 5 bei (3, 2)
+  Knoten 6 bei (2, 1)
+  Knoten 7 bei (3, 3)
+  Knoten 8 bei (1, 2)
+
+Kanten:
+  Kante: 1 -> 6, Pfad-ID: 1, lokale ID: 0
+  Kante: 6 -> 8, Pfad-ID: 1, lokale ID: 1
+  Kante: 8 -> 3, Pfad-ID: 1, lokale ID: 2
+  Kante: 3 -> 7, Pfad-ID: 1, lokale ID: 3
+  Kante: 7 -> 5, Pfad-ID: 1, lokale ID: 4
+  Kante: 5 -> 2, Pfad-ID: 1, lokale ID: 5
+  Kante: 2 -> 4, Pfad-ID: 1, lokale ID: 6
+  Kante: 3 -> 6, Pfad-ID: 2, lokale ID: 0
+  Kante: 6 -> 2, Pfad-ID: 2, lokale ID: 1
+  Kante: 2 -> 1, Pfad-ID: 2, lokale ID: 2
+  Kante: 1 -> 8, Pfad-ID: 2, lokale ID: 3
+  Kante: 8 -> 7, Pfad-ID: 2, lokale ID: 4
+  Kante: 7 -> 4, Pfad-ID: 2, lokale ID: 5
+  Kante: 4 -> 5, Pfad-ID: 2, lokale ID: 6
+
+Verwendete Gittersegmente pro Kante:
+  Für Kante 0: (2, 0) -> (2, 1)
+  Für Kante 1: (1, 1) -> (1, 2), (2, 1) -> (1, 1)
+  Für Kante 2: (1, 2) -> (2, 2)
+  Für Kante 3: (2, 2) -> (2, 3), (2, 3) -> (3, 3)
+  Für Kante 4: (3, 3) -> (3, 2)
+  Für Kante 5: (3, 2) -> (3, 1)
+  Für Kante 6: (3, 1) -> (4, 1), (4, 1) -> (4, 2)
+  Für Kante 7: (2, 2) -> (2, 1)
+  Für Kante 8: (2, 1) -> (3, 1)
+  Für Kante 9: (3, 0) -> (2, 0), (3, 1) -> (3, 0)
+  Für Kante 10: (1, 0) -> (1, 1), (1, 1) -> (1, 2), (2, 0) -> (1, 0)
+  Für Kante 11: (1, 2) -> (1, 3), (1, 3) -> (2, 3), (2, 3) -> (3, 3)
+  Für Kante 12: (3, 3) -> (4, 3), (4, 3) -> (4, 2)
+  Für Kante 13: (4, 2) -> (3, 2)
+=========================================
+
+=========================================
+Ergebnisblock:
+Anzahl der Variablen: 3648
+Anzahl der Nebenbedingungen: 6472
+Anzahl der nicht-nullbaren Koeffizienten: 58368
+Dauer der Modellberechnung: 54.1721 Sekunden
+--------------------------------------------------
+Objektivwert: 18.0
+Gittergröße: 7, 7
+
+Knoten (V):
+[1, 2, 3, 4, 5, 6, 7, 8]
+
+Pfad 1:
+[7, 5, 4, 1, 2, 6, 8, 3]
+Pfad 2:
+[8, 3, 7, 6, 1, 5, 4, 2]
+
+Knotenplatzierungen:
+  Knoten 1 bei (1, 6)
+  Knoten 2 bei (2, 6)
+  Knoten 3 bei (0, 4)
+  Knoten 4 bei (0, 7)
+  Knoten 5 bei (0, 6)
+  Knoten 6 bei (1, 5)
+  Knoten 7 bei (0, 5)
+  Knoten 8 bei (1, 4)
+
+Kanten:
+  Kante: 7 -> 5, Pfad-ID: 1, lokale ID: 0
+  Kante: 5 -> 4, Pfad-ID: 1, lokale ID: 1
+  Kante: 4 -> 1, Pfad-ID: 1, lokale ID: 2
+  Kante: 1 -> 2, Pfad-ID: 1, lokale ID: 3
+  Kante: 2 -> 6, Pfad-ID: 1, lokale ID: 4
+  Kante: 6 -> 8, Pfad-ID: 1, lokale ID: 5
+  Kante: 8 -> 3, Pfad-ID: 1, lokale ID: 6
+  Kante: 8 -> 3, Pfad-ID: 2, lokale ID: 0
+  Kante: 3 -> 7, Pfad-ID: 2, lokale ID: 1
+  Kante: 7 -> 6, Pfad-ID: 2, lokale ID: 2
+  Kante: 6 -> 1, Pfad-ID: 2, lokale ID: 3
+  Kante: 1 -> 5, Pfad-ID: 2, lokale ID: 4
+  Kante: 5 -> 4, Pfad-ID: 2, lokale ID: 5
+  Kante: 4 -> 2, Pfad-ID: 2, lokale ID: 6
+
+Verwendete Gittersegmente pro Kante:
+  Für Kante 0: (0, 5) -> (0, 6)
+  Für Kante 1: (0, 6) -> (0, 7)
+  Für Kante 2: (0, 7) -> (1, 7), (1, 7) -> (1, 6)
+  Für Kante 3: (1, 6) -> (2, 6)
+  Für Kante 4: (2, 5) -> (1, 5), (2, 6) -> (2, 5)
+  Für Kante 5: (1, 5) -> (1, 4)
+  Für Kante 6: (1, 4) -> (0, 4)
+  Für Kante 7: (1, 4) -> (0, 4)
+  Für Kante 8: (0, 4) -> (0, 5)
+  Für Kante 9: (0, 5) -> (1, 5)
+  Für Kante 10: (1, 5) -> (1, 6)
+  Für Kante 11: (1, 6) -> (0, 6)
+  Für Kante 12: (0, 6) -> (0, 7)
+  Für Kante 13: (0, 7) -> (1, 7), (1, 7) -> (2, 7), (2, 7) -> (2, 6)
+=========================================
+
+=========================================
+Ergebnisblock:
+Anzahl der Variablen: 3648
+Anzahl der Nebenbedingungen: 6472
+Anzahl der nicht-nullbaren Koeffizienten: 58368
+Dauer der Modellberechnung: 130.2258 Sekunden
+--------------------------------------------------
+Objektivwert: 20.0
+Gittergröße: 7, 7
+
+Knoten (V):
+[1, 2, 3, 4, 5, 6, 7, 8]
+
+Pfad 1:
+[2, 4, 7, 1, 5, 3, 6, 8]
+Pfad 2:
+[3, 6, 2, 5, 4, 1, 7, 8]
+
+Knotenplatzierungen:
+  Knoten 1 bei (1, 6)
+  Knoten 2 bei (1, 4)
+  Knoten 3 bei (2, 3)
+  Knoten 4 bei (1, 5)
+  Knoten 5 bei (2, 5)
+  Knoten 6 bei (1, 3)
+  Knoten 7 bei (0, 5)
+  Knoten 8 bei (0, 4)
+
+Kanten:
+  Kante: 2 -> 4, Pfad-ID: 1, lokale ID: 0
+  Kante: 4 -> 7, Pfad-ID: 1, lokale ID: 1
+  Kante: 7 -> 1, Pfad-ID: 1, lokale ID: 2
+  Kante: 1 -> 5, Pfad-ID: 1, lokale ID: 3
+  Kante: 5 -> 3, Pfad-ID: 1, lokale ID: 4
+  Kante: 3 -> 6, Pfad-ID: 1, lokale ID: 5
+  Kante: 6 -> 8, Pfad-ID: 1, lokale ID: 6
+  Kante: 3 -> 6, Pfad-ID: 2, lokale ID: 0
+  Kante: 6 -> 2, Pfad-ID: 2, lokale ID: 1
+  Kante: 2 -> 5, Pfad-ID: 2, lokale ID: 2
+  Kante: 5 -> 4, Pfad-ID: 2, lokale ID: 3
+  Kante: 4 -> 1, Pfad-ID: 2, lokale ID: 4
+  Kante: 1 -> 7, Pfad-ID: 2, lokale ID: 5
+  Kante: 7 -> 8, Pfad-ID: 2, lokale ID: 6
+
+Verwendete Gittersegmente pro Kante:
+  Für Kante 0: (1, 4) -> (1, 5)
+  Für Kante 1: (1, 5) -> (0, 5)
+  Für Kante 2: (0, 5) -> (0, 6), (0, 6) -> (1, 6)
+  Für Kante 3: (1, 6) -> (2, 6), (2, 6) -> (2, 5)
+  Für Kante 4: (2, 4) -> (2, 3), (2, 5) -> (2, 4)
+  Für Kante 5: (2, 3) -> (1, 3)
+  Für Kante 6: (0, 3) -> (0, 4), (1, 3) -> (0, 3)
+  Für Kante 7: (2, 3) -> (1, 3)
+  Für Kante 8: (1, 3) -> (1, 4)
+  Für Kante 9: (1, 4) -> (2, 4), (2, 4) -> (2, 5)
+  Für Kante 10: (2, 5) -> (1, 5)
+  Für Kante 11: (1, 5) -> (1, 6)
+  Für Kante 12: (0, 6) -> (0, 5), (1, 6) -> (0, 6)
+  Für Kante 13: (0, 5) -> (0, 4)
+=========================================
+
+=========================================
+Ergebnisblock:
+Anzahl der Variablen: 3648
+Anzahl der Nebenbedingungen: 6472
+Anzahl der nicht-nullbaren Koeffizienten: 58368
+Dauer der Modellberechnung: 39.5133 Sekunden
+--------------------------------------------------
+Objektivwert: 17.0
+Gittergröße: 7, 7
+
+Knoten (V):
+[1, 2, 3, 4, 5, 6, 7, 8]
+
+Pfad 1:
+[8, 5, 1, 7, 4, 6, 3, 2]
+Pfad 2:
+[7, 4, 6, 2, 8, 3, 1, 5]
+
+Knotenplatzierungen:
+  Knoten 1 bei (4, 6)
+  Knoten 2 bei (4, 4)
+  Knoten 3 bei (4, 5)
+  Knoten 4 bei (6, 5)
+  Knoten 5 bei (3, 6)
+  Knoten 6 bei (5, 5)
+  Knoten 7 bei (6, 6)
+  Knoten 8 bei (3, 5)
+
+Kanten:
+  Kante: 8 -> 5, Pfad-ID: 1, lokale ID: 0
+  Kante: 5 -> 1, Pfad-ID: 1, lokale ID: 1
+  Kante: 1 -> 7, Pfad-ID: 1, lokale ID: 2
+  Kante: 7 -> 4, Pfad-ID: 1, lokale ID: 3
+  Kante: 4 -> 6, Pfad-ID: 1, lokale ID: 4
+  Kante: 6 -> 3, Pfad-ID: 1, lokale ID: 5
+  Kante: 3 -> 2, Pfad-ID: 1, lokale ID: 6
+  Kante: 7 -> 4, Pfad-ID: 2, lokale ID: 0
+  Kante: 4 -> 6, Pfad-ID: 2, lokale ID: 1
+  Kante: 6 -> 2, Pfad-ID: 2, lokale ID: 2
+  Kante: 2 -> 8, Pfad-ID: 2, lokale ID: 3
+  Kante: 8 -> 3, Pfad-ID: 2, lokale ID: 4
+  Kante: 3 -> 1, Pfad-ID: 2, lokale ID: 5
+  Kante: 1 -> 5, Pfad-ID: 2, lokale ID: 6
+
+Verwendete Gittersegmente pro Kante:
+  Für Kante 0: (3, 5) -> (3, 6)
+  Für Kante 1: (3, 6) -> (4, 6)
+  Für Kante 2: (4, 6) -> (5, 6), (5, 6) -> (6, 6)
+  Für Kante 3: (6, 6) -> (6, 5)
+  Für Kante 4: (6, 5) -> (5, 5)
+  Für Kante 5: (5, 5) -> (4, 5)
+  Für Kante 6: (4, 5) -> (4, 4)
+  Für Kante 7: (6, 6) -> (6, 5)
+  Für Kante 8: (6, 5) -> (5, 5)
+  Für Kante 9: (5, 4) -> (4, 4), (5, 5) -> (5, 4)
+  Für Kante 10: (3, 4) -> (3, 5), (4, 4) -> (3, 4)
+  Für Kante 11: (3, 5) -> (4, 5)
+  Für Kante 12: (4, 5) -> (4, 6)
+  Für Kante 13: (4, 6) -> (3, 6)
+=========================================
+
+=========================================
+Ergebnisblock:
+Anzahl der Variablen: 3648
+Anzahl der Nebenbedingungen: 6472
+Anzahl der nicht-nullbaren Koeffizienten: 58368
+Dauer der Modellberechnung: 107.6236 Sekunden
+--------------------------------------------------
+Objektivwert: 18.0
+Gittergröße: 7, 7
+
+Knoten (V):
+[1, 2, 3, 4, 5, 6, 7, 8]
+
+Pfad 1:
+[5, 3, 2, 6, 8, 7, 4, 1]
+Pfad 2:
+[7, 6, 2, 8, 4, 1, 5, 3]
+
+Knotenplatzierungen:
+  Knoten 1 bei (2, 7)
+  Knoten 2 bei (2, 6)
+  Knoten 3 bei (3, 6)
+  Knoten 4 bei (1, 7)
+  Knoten 5 bei (3, 7)
+  Knoten 6 bei (2, 5)
+  Knoten 7 bei (0, 6)
+  Knoten 8 bei (1, 6)
+
+Kanten:
+  Kante: 5 -> 3, Pfad-ID: 1, lokale ID: 0
+  Kante: 3 -> 2, Pfad-ID: 1, lokale ID: 1
+  Kante: 2 -> 6, Pfad-ID: 1, lokale ID: 2
+  Kante: 6 -> 8, Pfad-ID: 1, lokale ID: 3
+  Kante: 8 -> 7, Pfad-ID: 1, lokale ID: 4
+  Kante: 7 -> 4, Pfad-ID: 1, lokale ID: 5
+  Kante: 4 -> 1, Pfad-ID: 1, lokale ID: 6
+  Kante: 7 -> 6, Pfad-ID: 2, lokale ID: 0
+  Kante: 6 -> 2, Pfad-ID: 2, lokale ID: 1
+  Kante: 2 -> 8, Pfad-ID: 2, lokale ID: 2
+  Kante: 8 -> 4, Pfad-ID: 2, lokale ID: 3
+  Kante: 4 -> 1, Pfad-ID: 2, lokale ID: 4
+  Kante: 1 -> 5, Pfad-ID: 2, lokale ID: 5
+  Kante: 5 -> 3, Pfad-ID: 2, lokale ID: 6
+
+Verwendete Gittersegmente pro Kante:
+  Für Kante 0: (3, 7) -> (3, 6)
+  Für Kante 1: (3, 6) -> (2, 6)
+  Für Kante 2: (2, 6) -> (2, 5)
+  Für Kante 3: (1, 5) -> (1, 6), (2, 5) -> (1, 5)
+  Für Kante 4: (1, 6) -> (0, 6)
+  Für Kante 5: (0, 6) -> (0, 7), (0, 7) -> (1, 7)
+  Für Kante 6: (1, 7) -> (2, 7)
+  Für Kante 7: (0, 5) -> (1, 5), (0, 6) -> (0, 5), (1, 5) -> (2, 5)
+  Für Kante 8: (2, 5) -> (2, 6)
+  Für Kante 9: (2, 6) -> (1, 6)
+  Für Kante 10: (1, 6) -> (1, 7)
+  Für Kante 11: (1, 7) -> (2, 7)
+  Für Kante 12: (2, 7) -> (3, 7)
+  Für Kante 13: (3, 7) -> (3, 6)
+=========================================
+
+=========================================
+Ergebnisblock:
+Anzahl der Variablen: 3648
+Anzahl der Nebenbedingungen: 6472
+Anzahl der nicht-nullbaren Koeffizienten: 58368
+Dauer der Modellberechnung: 260.2731 Sekunden
+--------------------------------------------------
+Objektivwert: 25.0
+Gittergröße: 7, 7
+
+Knoten (V):
+[1, 2, 3, 4, 5, 6, 7, 8]
+
+Pfad 1:
+[4, 1, 6, 7, 8, 3, 5, 2]
+Pfad 2:
+[5, 6, 4, 7, 3, 2, 1, 8]
+
+Knotenplatzierungen:
+  Knoten 1 bei (5, 2)
+  Knoten 2 bei (4, 2)
+  Knoten 3 bei (4, 3)
+  Knoten 4 bei (6, 2)
+  Knoten 5 bei (4, 1)
+  Knoten 6 bei (6, 1)
+  Knoten 7 bei (6, 3)
+  Knoten 8 bei (5, 3)
+
+Kanten:
+  Kante: 4 -> 1, Pfad-ID: 1, lokale ID: 0
+  Kante: 1 -> 6, Pfad-ID: 1, lokale ID: 1
+  Kante: 6 -> 7, Pfad-ID: 1, lokale ID: 2
+  Kante: 7 -> 8, Pfad-ID: 1, lokale ID: 3
+  Kante: 8 -> 3, Pfad-ID: 1, lokale ID: 4
+  Kante: 3 -> 5, Pfad-ID: 1, lokale ID: 5
+  Kante: 5 -> 2, Pfad-ID: 1, lokale ID: 6
+  Kante: 5 -> 6, Pfad-ID: 2, lokale ID: 0
+  Kante: 6 -> 4, Pfad-ID: 2, lokale ID: 1
+  Kante: 4 -> 7, Pfad-ID: 2, lokale ID: 2
+  Kante: 7 -> 3, Pfad-ID: 2, lokale ID: 3
+  Kante: 3 -> 2, Pfad-ID: 2, lokale ID: 4
+  Kante: 2 -> 1, Pfad-ID: 2, lokale ID: 5
+  Kante: 1 -> 8, Pfad-ID: 2, lokale ID: 6
+
+Verwendete Gittersegmente pro Kante:
+  Für Kante 0: (6, 2) -> (5, 2)
+  Für Kante 1: (5, 1) -> (6, 1), (5, 2) -> (5, 1)
+  Für Kante 2: (6, 1) -> (7, 1), (7, 1) -> (7, 2), (7, 2) -> (7, 3), (7, 3) -> (6, 3)
+  Für Kante 3: (6, 3) -> (5, 3)
+  Für Kante 4: (5, 3) -> (4, 3)
+  Für Kante 5: (3, 1) -> (4, 1), (3, 2) -> (3, 1), (3, 3) -> (3, 2), (4, 3) -> (3, 3)
+  Für Kante 6: (4, 1) -> (4, 2)
+  Für Kante 7: (4, 1) -> (5, 1), (5, 1) -> (6, 1)
+  Für Kante 8: (6, 1) -> (6, 2)
+  Für Kante 9: (6, 2) -> (6, 3)
+  Für Kante 10: (4, 4) -> (4, 3), (5, 4) -> (4, 4), (6, 3) -> (6, 4), (6, 4) -> (5, 4)
+  Für Kante 11: (4, 3) -> (4, 2)
+  Für Kante 12: (4, 2) -> (5, 2)
+  Für Kante 13: (5, 2) -> (5, 3)
+=========================================
+
+=========================================
+Ergebnisblock:
+Anzahl der Variablen: 3648
+Anzahl der Nebenbedingungen: 6472
+Anzahl der nicht-nullbaren Koeffizienten: 58368
+Dauer der Modellberechnung: 119.7635 Sekunden
+--------------------------------------------------
+Objektivwert: 23.0
+Gittergröße: 7, 7
+
+Knoten (V):
+[1, 2, 3, 4, 5, 6, 7, 8]
+
+Pfad 1:
+[6, 4, 8, 3, 7, 2, 5, 1]
+Pfad 2:
+[6, 4, 2, 3, 7, 1, 8, 5]
+
+Knotenplatzierungen:
+  Knoten 1 bei (3, 4)
+  Knoten 2 bei (4, 5)
+  Knoten 3 bei (4, 3)
+  Knoten 4 bei (4, 6)
+  Knoten 5 bei (3, 5)
+  Knoten 6 bei (4, 7)
+  Knoten 7 bei (4, 4)
+  Knoten 8 bei (2, 5)
+
+Kanten:
+  Kante: 6 -> 4, Pfad-ID: 1, lokale ID: 0
+  Kante: 4 -> 8, Pfad-ID: 1, lokale ID: 1
+  Kante: 8 -> 3, Pfad-ID: 1, lokale ID: 2
+  Kante: 3 -> 7, Pfad-ID: 1, lokale ID: 3
+  Kante: 7 -> 2, Pfad-ID: 1, lokale ID: 4
+  Kante: 2 -> 5, Pfad-ID: 1, lokale ID: 5
+  Kante: 5 -> 1, Pfad-ID: 1, lokale ID: 6
+  Kante: 6 -> 4, Pfad-ID: 2, lokale ID: 0
+  Kante: 4 -> 2, Pfad-ID: 2, lokale ID: 1
+  Kante: 2 -> 3, Pfad-ID: 2, lokale ID: 2
+  Kante: 3 -> 7, Pfad-ID: 2, lokale ID: 3
+  Kante: 7 -> 1, Pfad-ID: 2, lokale ID: 4
+  Kante: 1 -> 8, Pfad-ID: 2, lokale ID: 5
+  Kante: 8 -> 5, Pfad-ID: 2, lokale ID: 6
+
+Verwendete Gittersegmente pro Kante:
+  Für Kante 0: (4, 7) -> (4, 6)
+  Für Kante 1: (2, 6) -> (2, 5), (3, 6) -> (2, 6), (4, 6) -> (3, 6)
+  Für Kante 2: (2, 3) -> (3, 3), (2, 4) -> (2, 3), (2, 5) -> (2, 4), (3, 3) -> (4, 3)
+  Für Kante 3: (4, 3) -> (4, 4)
+  Für Kante 4: (4, 4) -> (4, 5)
+  Für Kante 5: (4, 5) -> (3, 5)
+  Für Kante 6: (3, 5) -> (3, 4)
+  Für Kante 7: (4, 7) -> (4, 6)
+  Für Kante 8: (4, 6) -> (4, 5)
+  Für Kante 9: (4, 5) -> (5, 5), (5, 3) -> (4, 3), (5, 4) -> (5, 3), (5, 5) -> (5, 4)
+  Für Kante 10: (4, 3) -> (4, 4)
+  Für Kante 11: (4, 4) -> (3, 4)
+  Für Kante 12: (2, 4) -> (2, 5), (3, 4) -> (2, 4)
+  Für Kante 13: (2, 5) -> (3, 5)
+=========================================
+
+=========================================
+Ergebnisblock:
+Anzahl der Variablen: 3648
+Anzahl der Nebenbedingungen: 6472
+Anzahl der nicht-nullbaren Koeffizienten: 58368
+Dauer der Modellberechnung: 137.1585 Sekunden
+--------------------------------------------------
+Objektivwert: 23.0
+Gittergröße: 7, 7
+
+Knoten (V):
+[1, 2, 3, 4, 5, 6, 7, 8]
+
+Pfad 1:
+[6, 8, 3, 1, 4, 5, 2, 7]
+Pfad 2:
+[3, 2, 1, 5, 6, 4, 8, 7]
+
+Knotenplatzierungen:
+  Knoten 1 bei (1, 3)
+  Knoten 2 bei (1, 2)
+  Knoten 3 bei (2, 3)
+  Knoten 4 bei (1, 4)
+  Knoten 5 bei (0, 3)
+  Knoten 6 bei (1, 5)
+  Knoten 7 bei (3, 2)
+  Knoten 8 bei (2, 4)
+
+Kanten:
+  Kante: 6 -> 8, Pfad-ID: 1, lokale ID: 0
+  Kante: 8 -> 3, Pfad-ID: 1, lokale ID: 1
+  Kante: 3 -> 1, Pfad-ID: 1, lokale ID: 2
+  Kante: 1 -> 4, Pfad-ID: 1, lokale ID: 3
+  Kante: 4 -> 5, Pfad-ID: 1, lokale ID: 4
+  Kante: 5 -> 2, Pfad-ID: 1, lokale ID: 5
+  Kante: 2 -> 7, Pfad-ID: 1, lokale ID: 6
+  Kante: 3 -> 2, Pfad-ID: 2, lokale ID: 0
+  Kante: 2 -> 1, Pfad-ID: 2, lokale ID: 1
+  Kante: 1 -> 5, Pfad-ID: 2, lokale ID: 2
+  Kante: 5 -> 6, Pfad-ID: 2, lokale ID: 3
+  Kante: 6 -> 4, Pfad-ID: 2, lokale ID: 4
+  Kante: 4 -> 8, Pfad-ID: 2, lokale ID: 5
+  Kante: 8 -> 7, Pfad-ID: 2, lokale ID: 6
+
+Verwendete Gittersegmente pro Kante:
+  Für Kante 0: (1, 5) -> (2, 5), (2, 5) -> (2, 4)
+  Für Kante 1: (2, 4) -> (2, 3)
+  Für Kante 2: (2, 3) -> (1, 3)
+  Für Kante 3: (1, 3) -> (1, 4)
+  Für Kante 4: (0, 4) -> (0, 3), (1, 4) -> (0, 4)
+  Für Kante 5: (0, 2) -> (1, 2), (0, 3) -> (0, 2)
+  Für Kante 6: (1, 2) -> (2, 2), (2, 2) -> (3, 2)
+  Für Kante 7: (2, 2) -> (1, 2), (2, 3) -> (2, 2)
+  Für Kante 8: (1, 2) -> (1, 3)
+  Für Kante 9: (1, 3) -> (0, 3)
+  Für Kante 10: (0, 3) -> (0, 4), (0, 4) -> (0, 5), (0, 5) -> (1, 5)
+  Für Kante 11: (1, 5) -> (1, 4)
+  Für Kante 12: (1, 4) -> (2, 4)
+  Für Kante 13: (2, 4) -> (3, 4), (3, 3) -> (3, 2), (3, 4) -> (3, 3)
+=========================================
+

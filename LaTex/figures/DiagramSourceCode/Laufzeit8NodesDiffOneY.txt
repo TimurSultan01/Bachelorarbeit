@@ -1,0 +1,29 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Die Laufzeiten für 5x5 und 8x8 Gitter
+laufzeiten_5x5 = [7.7043, 3.9504, 3.9492, 5.0621, 4.0112, 5.2653, 5.5736, 4.9194, 5.4672, 4.9976]
+laufzeiten_8x8 = [494.0174, 113.4208, 136.5208, 54.1721, 130.2258, 39.5133, 107.6236, 260.2731, 119.7635, 137.1585]
+
+# Erstelle das Diagramm
+plt.figure(figsize=(10, 6))
+
+# Plot für 5x5 Gitter
+sns.lineplot(x=range(1, 11), y=laufzeiten_5x5, label="5x5 Gitter", color='royalblue', marker='o')
+
+# Plot für 8x8 Gitter
+sns.lineplot(x=range(1, 11), y=laufzeiten_8x8, label="8x8 Gitter", color='green', marker='s')
+
+# Achsenbeschriftung und Titel
+plt.xlabel('Testfälle')
+plt.ylabel('Laufzeit (Sekunden)')
+plt.title('Laufzeit der Testfälle für 5x5 und 8x8 Gitter')
+
+# Gitter anzeigen
+plt.grid(True)
+
+# Legende hinzufügen
+plt.legend()
+
+# Diagramm anzeigen
+plt.show()

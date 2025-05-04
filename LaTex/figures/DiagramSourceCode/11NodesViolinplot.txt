@@ -1,0 +1,20 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Die Laufzeiten für 11 Knoten
+laufzeiten_11_knoten = [
+    8090.48, 167.68, 4177.55, 11551.8514, 1705.2800, 6174.7680, 163.7456,
+    6349.0344, 4104.3928, 399.0411
+]
+
+# Violinplot erstellen
+plt.figure(figsize=(10, 6))
+sns.violinplot(data=[laufzeiten_11_knoten])
+
+# Achsenbeschriftung und Titel
+plt.xticks([0], ['11 Knoten'])  # Die X-Achse mit der Bezeichnung '11 Knoten'
+plt.ylabel('Laufzeit (Sekunden)')
+plt.title('Violinplot der Laufzeiten für 11 Knoten')
+
+# Diagramm anzeigen
+plt.show()

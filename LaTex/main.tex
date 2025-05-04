@@ -47,7 +47,9 @@ Prof.\ Dr.\ Stefan Näher}
 
 
 \begin{abstract}
-bliblablub
+Diese Arbeit beschäftigt sich mit der Modellierung und Optimierung von überlappenden Pfadstrukturen auf einem zweidimensionalen Gitter. Ziel ist es, zwei Hamiltonpfade in einem Gitter so einzubetten, dass sie sich nicht selbst schneiden und gleichzeitig möglichst wenige Gitterkanten nutzen. Zu diesem Zweck wurde ein lineares Optimierungsmodell formuliert, das sowohl die Pfade selbst als auch deren Überlappung über Variablen und Nebenbedingungen abbildet. Zur Validierung wurde ein Python-Skript entwickelt, das automatisiert Testfälle erzeugt und die Einhaltung der Modellrestriktionen überprüft.\newline 
+Die experimentelle Evaluation zeigt, dass das Modell für kleinere Instanzen mit wenigen Knoten und geringer Gittergröße effizient Lösungen berechnet. Mit zunehmender Knotenzahl und Gitterdimension steigen jedoch sowohl die Modellkomplexität als auch die Rechenzeiten stark an. Insbesondere ab etwa 12 Knoten ist das Modell in der Praxis nicht mehr anwendbar, da die Laufzeit exponentiell wächst und sich stark zwischen einzelnen Testfällen unterscheidet. Eine detaillierte Analyse zeigt, dass diese Varianz nicht allein durch einfache Metriken wie Pfadlänge oder Überlappung erklärbar ist, sondern stark von der strukturellen Komplexität der resultierenden Einbettung abhängt.\newline 
+Die Arbeit schließt mit einer Diskussion möglicher Optimierungsansätze sowie einem Ausblick auf potenzielle Erweiterungen des Modells, etwa für mehr als zwei Pfade oder spezifische Einbettungsanforderungen. Insgesamt zeigt sich, dass das Modell eine robuste Grundlage für strukturierte Pfadeinbettung darstellt – jedoch nur für moderat große Instanzen praktisch einsetzbar ist
 \end{abstract}
 
 \thesistableofcontents
@@ -55,7 +57,7 @@ bliblablub
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Einleitung}
 \section{Motivation und Relevanz des Themas}
-Das \emph{Simultaneous Embedding} problematisiert die gleichzeitige Visualisierung mehrerer Graphen auf derselben Knotenmenge. Insbesondere wenn sich diese gemeinsamen Teilstrukturen nur in einer Kante oder in wenigen Pfaden unterscheiden, ist eine konsistente Darstellung essentiell, um Unterschiede direkt zu erkennen und zu analysieren. In vielen Szenarien ist es notwendig, mehrere zusammenhängende Strukturen gleichzeitig und ohne visuelle Konflikte abzubilden, um deren Beziehungen und Interaktionen besser nachvollziehbar zu machen. Typische Anwendungsfelder sind:
+Das \emph{Simultaneous Embedding} problematisiert die gleichzeitige Visualisierung mehrerer Graphen auf derselben Knotenmenge. Insbesondere wenn sich diese gemeinsamen Teilstrukturen nur in einer Kante oder in wenigen Pfaden unterscheiden, ist eine konsistente Darstellung essentiell, um Unterschiede direkt zu erkennen und zu analysieren. In vielen Szenarien ist es notwendig, mehrere zusammenhängende Strukturen gleichzeitig und ohne visuelle Konflikte abzubilden, um deren Beziehungen und Interaktionen besser nachvollziehbar zu machen. Typische Anwendungsfelder sind \cite{Handbook}:
 \begin{itemize}
   \item \textbf{Schaltkreisdesign:} Beim Entwurf integrierter Schaltkreise (ICs) müssen zahlreiche Leitungsverbindungen auf kleinstem Raum untergebracht werden. Jeder Pfad entspricht dabei einer elektrischen Verbindung, die auf dem Chip realisiert werden muss. Eine platzsparende Einbettung hilft, die Fläche des Chips zu minimieren, was sowohl Produktionskosten als auch Signalverzögerungen und Energieverbrauch reduziert.
   \item \textbf{Netzwerkplanung:} Beim Vergleich alternativer Verbindungsstrukturen - etwa bei Verkehrs- oder Kommunikationsnetzen - erlaubt die simultane Darstellung mehrerer Routen eine direkte Analyse von Engpässen, Redundanzen und Alternativen, wodurch fundierte Planungsentscheidungen getroffen werden können.
@@ -356,15 +358,187 @@ Für die Durchführung der Experimente und Testreihen wurde das Modell auf einer
     \caption{Spezifikationen der verwendeten Testumgebung}
     \label{tab:spezifikationen}
 \end{table}
-Für die experimentelle Evaluierung des entwickelten ILP-Modells wurden verschiedene Testfälle konzipiert, die unterschiedliche Aspekte der Modellleistung beleuchten. Zunächst wurde ein Test entworfen, bei dem die Anzahl der Knoten sukzessive erhöht wird, um den Einfluss der Problemgröße auf die Laufzeit, die Anzahl der Variablen und die Komplexität des Modells zu untersuchen. Dabei wird die Knotenzahl von 5 bis 15 gestaffelt, und für jede Knotenzahl werden 10 zufällig generierte Instanzen betrachtet. Diese Zufallsexemplare werden mittels eines Python-Skripts erzeugt, wobei für jede Instanz die Knoten zufällig sortiert werden, um unterschiedliche Pfadkonstellationen zu simulieren. Die Gittergröße wird hierbei dynamisch angepasst – jeweils auf $(\left\lceil n/2 \right\rceil+1 \times \left\lceil n/2 \right\rceil+1),$ wobei $n$ die aktuelle Anzahl der Knoten darstellt – um ausreichend Platz zu bieten, ohne das Modell unnötig zu erweitern.\newline
-Ein weiterer Testfall dient der Untersuchung, wie sich die Überlappung der beiden Pfade – gemessen an der Anzahl gemeinsamer Kanten – auf die Laufzeit des Modells auswirkt. Für diesen Test wird die Knotenzahl konstant auf 12 festgelegt, ebenso die Gittergröße, welche auf $(7 \times 7)$ fixiert ist. Es werden jeweils 10 Testfälle erzeugt, bei denen die beiden Pfade genau $x$ gemeinsame Kanten besitzen. Der Wert $x$ variiert dabei sukzessive, beginnend bei 12 gleichen Kanten (also vollständige Überlappung) bis hin zu 0 gleichen Kanten (völlig disjunkte Pfade). Ein eigens entwickeltes Python-Skript gewährleistet dabei die Einhaltung der gewünschten Anzahl gemeinsamer Kanten zwischen den Pfaden. Durch diese systematische Variation kann gezielt analysiert werden, ob und in welchem Ausmaß sich der Grad der strukturellen Überlappung auf die Lösungsdauer des Modells auswirkt. Die Pfade selbst werden dabei zufällig generiert, wobei das Skript sicherstellt, dass die vorgegebene Anzahl an Überschneidungen exakt eingehalten wird.
+Für die experimentelle Evaluierung des entwickelten ILP-Modells wurden verschiedene Testfälle konzipiert, die unterschiedliche Aspekte der Modellleistung beleuchten. Zunächst wurde ein Test entworfen, bei dem die Anzahl der Knoten sukzessive erhöht wird, um den Einfluss der Problemgröße auf die Laufzeit, die Anzahl der Variablen und die Komplexität des Modells zu untersuchen. Dabei wird die Knotenzahl von 5 bis 11 gestaffelt, und für jede Knotenzahl werden 10 zufällig generierte Instanzen betrachtet. Diese Zufallsexemplare werden mittels eines Python-Skripts erzeugt, wobei für jede Instanz die Knoten zufällig sortiert werden, um unterschiedliche Pfadkonstellationen zu simulieren. Die Gittergröße wird hierbei dynamisch angepasst – jeweils auf $(\left\lceil n/2 \right\rceil+1 \times \left\lceil n/2 \right\rceil+1),$ wobei $n$ die aktuelle Anzahl der Knoten darstellt – um ausreichend Platz zu bieten, ohne das Modell unnötig zu erweitern.\newline
+Ein weiterer Testfall dient der Untersuchung, wie sich die Überlappung der beiden Pfade – gemessen an der Anzahl gemeinsamer adjazenter Knoten – auf die Laufzeit des Modells auswirkt. Für diesen Test wird die Knotenzahl konstant auf 10 festgelegt, ebenso die Gittergröße, welche auf $(6 \times 6)$ fixiert ist. Es werden jeweils 10 Testfälle erzeugt, bei denen die beiden Pfade genau $x$ gemeinsame adjazente Knoten besitzen. Der Wert $x$ variiert dabei sukzessive, beginnend bei 9 gleichen adjazenten Knoten (also vollständige Überlappung) bis hin zu 0 gleichen adjazenten Knoten (völlig disjunkte Pfade). Ein eigens entwickeltes Python-Skript gewährleistet dabei die Einhaltung der gewünschten Anzahl gemeinsamer adjazenter Knoten zwischen den Pfaden. Durch diese systematische Variation kann gezielt analysiert werden, ob und in welchem Ausmaß sich der Grad der strukturellen Überlappung auf die Lösungsdauer des Modells auswirkt. Die Pfade selbst werden dabei zufällig generiert, wobei das Skript sicherstellt, dass die vorgegebene Anzahl an Überschneidungen exakt eingehalten wird.
 \newline
-Bereits in vorangegangenen Vorstudien konnte beobachtet werden, dass das Modell grundsätzlich korrekt arbeitet. Allerdings ergaben erste Tests, dass die Laufzeiten exponentiell mit zunehmender Knotenzahl ansteigen. Insbesondere bei Instanzen mit mehr als 15 Knoten würden, je nach Komplexität der Pfade, rechenintensive Berechnungen mehrere Tage in Anspruch nehmen – was angesichts der vorgegebenen Zeitressourcen für die Abgabe nicht realisierbar ist. Deshalb wurde der erste Testabschnitt bewusst auf bis zu 15 Knoten begrenzt.\newline
+Bereits in vorangegangenen Tests konnte beobachtet werden, dass das Modell grundsätzlich korrekt arbeitet. Allerdings ergaben diese, dass die Laufzeiten exponentiell mit zunehmender Knotenzahl ansteigen. Insbesondere bei Instanzen mit mehr als 11 Knoten würden, je nach Komplexität der Pfade, rechenintensive Berechnungen mehrere Tage in Anspruch nehmen – was angesichts der vorgegebenen Zeitressourcen für die Abgabe nicht realisierbar ist. Deshalb wurde der erste Testabschnitt bewusst auf bis zu 11 Knoten begrenzt.\newline
 Diese experimentellen Testfälle ermöglichen es, sowohl die Skalierung des Modells als auch den Einfluss der Pfadkomplexität detailliert zu analysieren. Die gewonnenen Erkenntnisse fließen in die spätere Bewertung der Effizienz und Praxistauglichkeit des Optimierungsansatzes ein.
-\section{Auswertung der Ergebnisse}
-\section{Diskussion der Ergebnisse}
 
-\chapter{Ausblick und zukünftige Arbeiten}
+\section{Auswertung der Ergebnisse}
+In dieser Sektion werden die im Rahmen der experimentellen Evaluation gewonnenen Daten systematisch ausgewertet und analysiert. Ziel ist es, Zusammenhänge zwischen verschiedenen Einflussfaktoren - wie Laufzeit, Modellkomplexität, Pfadüberlappung - zu identifizieren und zu bewerten.  Zur Visualisierung der Ergebnisse werden unterschiedliche Diagrammtypen verwendet. Liniendiagramme kommen zum Einsatz, um Mittelwert- und Medianverläufe über verschiedene Testfallgruppen darzustellen und mögliche Korrelationen (oder das Fehlen einer Korrelation) zwischen Metriken wie Laufzeit und Objektivwert aufzuzeigen, während Violinplots genutzt werden, um die Streuung und Verteilung einzelner Metriken zu untersuchen. Als Objektivwert wird die Anzahl der genutzten Gitterkanten betrachtet, die dem Wert der Zielfunktion zugeordnet sind\newline
+Ein besonderes Augenmerk liegt auf der Frage, inwiefern die Struktur der Pfade, wie etwa die Anzahl gemeinsamer Kanten oder die Anzahl adjazenter Knoten, sowie die Komplexität der resultierenden Einbettung Einfluss auf die Rechenzeit nehmen. Durch die Kombination dieser verschiedenen Visualisierung wird angestrebt, sowohl zentrale Tendenzen als auch Ausreißer und Verteilungseffekte sichtbar zu machen.\newline
+Die nachfolgenden Abschnitte gliedern sich entsprechend der zuvor beschriebenen Testfälle
+und betrachten zunächst den Einfluss  der Knotenzahl auf die Modellperformance. Im Anschluss werden die Auswirkungen unterschiedlicher Pfadüberlappungen detailliert analysiert.\newline
+
+Im ersten Schritt der Analyse wird die Entwicklung der Modellkomplexität in Bezug auf zwei zentrale Metriken - die Anzahl der erzeugten Variablen und die Anzahl der formulierten Nebenbedingungen – betrachtet. Diese Größe hat direkten Einfluss auf die Rechenzeit des Solvers. Um diesen Zusammenhang zu illustrieren, wurden zwei verschiedene Perspektiven visualisiert: einerseits in Abhängigkeit von der Gittergröße bei konstanter Knotenzahl (Abbildung \ref{fig:var_grid}), andererseits in Abhängigkeit der Knotenzahl bei fixer Gittergröße (Abbildung \ref{fig:var_nodes}).\newline 
+Abbildung \ref{fig:var_grid} zeigt deutlich, dass sowohl die Anzahl der Variablen als auch die Nebenbedingungen nicht linear, sondern vielmehr überproportional mit zunehmender Gittergröße ansteigen. Besonders auffällig ist der quadratische Zuwachs der Nebenbedingungen, was sich durch die Vielzahl an Restriktionen zur Platzierung, Pfadführung und Kantenverwendung erklären lässt. Während sich die Variablenanzahl zunächst vergleichsweise moderat entwickelt, wird mit wachsendem Gitter auch hier ein zunehmend steiler Anstieg beobachtet.\newline
+In Abbildung \ref{fig:var_nodes} wird der Einfluss der Knotenzahl bei gleichbleibender Gittergröße (in diesem Fall $10 \times 10$) untersucht. Hier lässt sich ein fast linearer Zusammenhang erkennen: Sowohl die Anzahl der Variablen als auch die Nebenbedingungen steigen mit wachsender Knotenzahl kontinuierlich an. Dieser Befund ist konsistent mit der Tatsache, dass mit jedem weiteren Knoten zusätzliche Platzierungsvariablen erforderlich sind.\newline 
+Diese Beobachtungen verdeutlichen die Notwendigkeit einer Beschränkung der Testfälle hinsichtlich Knotenzahl und Gittergröße, da die Modellgröße andernfalls schnell in einem Bereich liegt, der selbst für leistungsfähige Solver wie Gurobi nicht mehr effizient lösbar ist. Entsprechende Einschränkungen wurden daher in der Versuchsplanung berücksichtigt.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/20NodesVarNEb.png}
+    \caption{Anzahl Variablen und Nebenbedingungen bei 20 Knoten in verschiedenen Gittergrößen}
+    \label{fig:var_grid}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/VariabelConstrains5-11.png}
+    \caption{Anzahl der Variablen und Nebenbedingungen in Abhängigkeit von der Knotenzahl bei fester Gittergröße ($10 \times 10$)}
+    \label{fig:var_nodes}
+\end{figure}
+Um zu Veranschaulichen, wie die Laufzeit des Modells in Abhängigkeit von der Gittergröße beeinflusst wird, wurden 10 Testfälle mit identischer Knotenzahl (8 Knoten) sowohl auf einem $(5\times 5)-$Gitter als auch auf einem $(8\times8)-$Gitter ausgeführt. Die Ergebnisse in Abbildung \ref{fig:SekNode8} zeigen einen klaren Anstieg der Rechenzeit bei größerem Gitter. Während die Laufzeiten im $(5\times 5)-$Gitter relativ konstant und niedrig blieben - mit Werten im Bereich von ca. 4 bis 7,7 Sekunden - stiegen sie im $(8\times 8)-$Gitter signifikant an und zeigten zudem eine deutlich höhere Varianz. Die Laufzeiten lagen hier zwischen rund 39 und 494 Sekunden. Diese Schwankungen deuten darauf hin, dass die Lösungsdauer stark von der konkreten Struktur der generierten Testfälle abhängt, sobald die Komplexität der möglichen Pfadanordnungen innerhalb des Gitters zunimmt. Gleichzeitig unterstreicht dieses Verhalten die Sensitivität des ILP-Modells gegenüber der Gittergröße, was insbesondere bei wachsender Problemgröße ein limitierender Faktor für die praktische Anwendbarkeit darstellt. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/Laufzeit8NodesDiffOneY.png}
+    \caption{Vergleich der Laufzeiten bei 8 Knoten mit unterschiedlicher Gittergröße (5$\times$5 vs. 8$\times$8)}
+    \label{fig:SekNode8}
+\end{figure}
+Ein sinnvoller Ansatz zur Analyse der Rechenzeiten besteht im parallelen Vergleich von Durchschnitts- und Medianwerten. Während der Durchschnitt einen globalen Mittelwert der Laufzeiten darstellt, gibt der Median Aufschluss über die zentrale Tendenz, ohne von Ausreißern beeinflusst zu werden. Der Vergleich beider Werte erlaubt somit Rückschlüsse auf die Streuung innerhalb der Testfälle und hilft dabei die Robustheit der Modelllaufzeiten unter verschiedenen Bedingungen zu beurteilen. \newline
+Die Ergebnisse für Knotenzahlen von 5 bis 8 (vgl. Abbildung \ref{fig:Median5}) zeigen, dass sich Durchschnitts- und Medianwerte in allen betrachteten Testfällen sehr nahe liegen. So liegen die Mittelwerte bei 0,15 s (5 Knoten), 0,47 s (6 Knoten), 1,82 s (7 Knoten) und 5,09 s (8 Knoten), während die Mediane mit 0,15 s, 0,48 s, 1,80 s und 4,99 s nahezu identisch sind. Diese enge Übereinstimmung weist auf eine relativ homogene Verteilung der Laufzeiten innerhalb dieser Gruppe hin, ohne das Auftreten signifikanter Ausreißer. Die Komplexität der generierten Instanzen scheint in diesem Bereich noch ausreichend beherrschbar, sodass das Modell konsistente Laufzeiten erzielt.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/Mean_Medain5-8.png}
+    \caption{Vergleich von Mittelwert und Median der Laufzeiten für Knotenzahlen 5 bis 8.}
+    \label{fig:Median5}
+\end{figure}
+Ein anderes Bild ergibt sich jedoch bei höheren Knotenzahlen von 9 bis 11. (vgl. Abbildung \ref{fig:Median9}). \newline
+Es ist zunächst eine kontinuierliche Zunahme der mittleren Laufzeit zu beobachten: Der Mittelwert steigt von etwas 24,36 Sekunden bei 9 Knoten über 43,54 Sekunden bei 10 Knoten auf beachtliche 4104,22 Sekunden bei 11 Knoten. Auch die Medianwerte spiegeln diesen Anstieg wider - sie liegen bei 37,75, 86,49 und 4129,85 Sekunden. Auffällig ist allerdings, dass sich bei 11 Knoten Median und Mittelwert fast exakt entsprechen. Dies könnte auf eine gleichmäßige Verteilung der Laufzeiten hinweisen - doch ein Blick auf die zugehörige Verteilung in Abbildung \ref{fig:Violin} widerlegt diese Annahme.\newline
+Der Violinplot für 11 Knoten zeigt eine extreme Streuung der Laufzeiten: Sie reichen von sehr kurzen Laufzeiten unter 200 Sekunden (z.B. 167,68 s und 163,75 s) bis hin zu Ausreißern im fünfstelligen Bereich (z.B. 8090,48 s und 11551,85 s). Diese deutliche Heterogenität innerhalb der Testfälle wird durch die symmetrischen Mittel- und Medianwerte verschleiert. Der Violinplot offenbart damit ein wesentlich realistischeres Bild der Komplexitätsunterschiede, die durch zufällig generierte Pfadstrukturen bei gleicher Knotenzahl entstehen können. \newline 
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/Mean_Medain9-11.png}
+        \captionof{figure}{Mittelwert- und Medianvergleich der Laufzeiten für Knotenzahlen 9 bis 11.}
+        \label{fig:Median9}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/11NodesViolinplot.png}
+        \captionof{figure}{Verteilung der Laufzeiten für Testfälle mit 11 Knoten.}
+        \label{fig:Violin}
+    \end{minipage}
+\end{figure}
+Diese Analyse unterstreicht die Notwendigkeit, bei der Bewertung von Modellergebnissen nicht ausschließlich auf zentrale Kennwerte zu vertrauen, sondern stets auch die zugrunde liegende Verteilung zu betrachten.\newline 
+Im folgenden Abschnitt wird untersucht, welche Faktoren für die unterschiedlichen Laufzeiten der Testfälle mit 10 Knoten verantwortlich sind. Zu diesem Zweck werden die Objektivwerte und die Anzahl gleicher adjazenter Knoten als mögliche Einflussfaktoren betrachtet, um mögliche Korrelationen zu den beobachteten Laufzeiten zu identifizieren.\newline 
+Die erste Abbildung \ref{fig:LaufObj}, welche die Laufzeiten im Vergleich zu den Objektivwerten zeigt, lässt keine klare Korrelation erkennen. Zwar zeigen einige Testfälle ähnliche Objektivwerte, jedoch weichen ihre Laufzeiten stark voneinander ab. Ein markantes Beispiel hierfür sind die Testfälle 4 und 6 mit den Objektivwerten 28 , die Laufzeiten von 45,44 Sekunden bzw. 145,99 Sekunden aufwiesen. Diese deutliche Varianz in den Laufzeiten trotz identischer Objektivwerte lässt darauf schließen, dass der Objektivwert allein keinen verlässlichen Rückschluss auf die Laufzeit zulässt.\newline 
+Auch die zweite Abbildung \ref{fig:LaufAdj}, die die Laufzeit im Verhältnis zur Anzahl gleicher adjazenter Knoten darstellt, zeigt keinen eindeutigen Zusammenhang. Der Testfall 3 und 7 mit jeweils 3 gleichen adjazenten Knoten haben  eine Laufzeit von 31,22 Sekunden bzw. 231,68 Sekunden. Diese Schwankungen lassen darauf schließen, dass die Anzahl gleicher Knoten keinen signifikanten Einfluss auf die Laufzeit hat.
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/LaufzeitObjektivwert10.png}
+        \captionof{figure}{Vergleich von Laufzeiten mit Objektivwert für Knotenzahl 10.}
+        \label{fig:LaufObj}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/LaufzeitAdjNodes10.png}
+        \captionof{figure}{Vergleich von Laufzeiten mit der Anzahl gleicher adjazenter Knoten für Knotenzahl 10.}
+        \label{fig:LaufAdj}
+    \end{minipage}
+\end{figure}
+Insgesamt zeigen die Auswertungen, dass weder die Objektivwerte noch die Anzahl der gleichen adjazenter Knoten in einer eindeutigen Korrelation zu den Laufzeiten stehen. Die starke Streuung der Laufzeiten, selbst bei ähnlichen Werten in den untersuchten Parametern, deutet darauf hin, dass andere, bisher nicht berücksichtigte Faktoren einen größeren Einfluss auf die Laufzeit haben könnten.\newline 
+Um ein besseres Verständnis der großen Laufzeitunterschiede zwischen den einzelnen Testfällen zu gewinnen, werden im Folgenden vier ausgewählte Testfälle - nämlich 3,4,6 und 7 - im Detail betrachtet. Abbildung ... zeigt die resultierenden Einbettungen dieser Fälle. Die Auswahl basiert auf der zuvor festgestellten Streuung in den Laufzeiten trotz ähnlicher Objektivwerte und gleicher Anzahl gemeinsamer adjazenter Knoten. Durch die Analyse der finalen Einbettungen wird deutlich, dass insbesondere die Länge und Anzahl der verwendeten Kanten im resultierenden Graphen eine entscheidende Rolle für die Laufzeit spielen könnten.\newline 
+Ein Vergleich der Graphen aus Abbildung \ref{fig:gesamtabbildung}. verdeutlicht diesen Zusammenhang: Testfall 3 (Abbildung \ref{fig:teilbild_a}) weist eine Laufzeit von nur 31,22 Sekunden auf und enthält lediglich zwei Kanten der Länge 2 sowie eine einzige Kante der Länge 6. Testfall 4 (Abbildung~\ref{fig:teilbild_b}) zeigt mit fünf Kanten der Länge 2, einer Kante der Länge 3 und einer weiteren der Länge 6 bereits eine leicht erhöhte Komplexität und resultiert in einer Laufzeit von 45,44 Sekunden. Deutlich komplexer gestaltet sich die Einbettung bei Testfall 6 (Abbildung \ref{fig:teilbild_c}), mit mehreren Kanten höherer Länge – insbesondere zwei Kanten der Länge 3 sowie zwei der Länge 4 – was sich in einer Laufzeit von 145,99 Sekunden widerspiegelt. Noch ausgeprägter ist dieser Effekt bei Testfall 7 (Abbildung \ref{fig:teilbild_d}): Hier kommen zusätzlich zur vorherigen Struktur erneut längere Kanten hinzu, was zu einer nochmals erhöhten Laufzeit von 231,68 Sekunden führt.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/Testfall3.png}
+        \caption{Testfall 3}
+        \label{fig:teilbild_a}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/Testfall4.png}
+        \caption{Testfall 4}
+        \label{fig:teilbild_b}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/Testfall6.png}
+        \caption{Testfall 6}
+        \label{fig:teilbild_c}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/Testfall7.png}
+        \caption{Testfall 7}
+        \label{fig:teilbild_d}
+    \end{subfigure}
+    \hfill
+    \caption{Graphische Darstellung der vier Testfälle.}
+    \label{fig:gesamtabbildung}
+\end{figure}
+
+
+Diese Beobachtungen legen nahe, dass nicht die Anzahl der verwendeten Gitterkanten, sondern insbesondere die Anzahl längerer Kanten – also solcher mit einer Länge größer als 1 – maßgeblichen Einfluss auf die benötigte Rechenzeit hat. Die resultierende Einbettungskomplexität erweist sich damit als zentraler Einflussfaktor auf die Laufzeit, was durch die zusätzliche Übersicht in Tabelle \ref{tab:tabpa} über alle Testfälle mit Knotenzahl 10 gestützt wird.\newline 
+Insgesamt zeigt sich, dass die Laufzeit nicht durch aggregierte Merkmale wie Objektivwert oder Knoteneigenschaften erklärbar ist, sondern vielmehr durch die konkrete geometrische Ausprägung der Pfade im Gitter beeinflusst wird. Die Komplexität der Einbettung selbst – insbesondere gemessen an der Anzahl und Länge der genutzten Gitterkanten – steht somit in klarer Korrelation zur benötigten Rechenzeit.\newline 
+
+
+\begin{longtable}{|c|c|c|}
+\caption{Laufzeiten und Pfadlängenverteilung für alle 10 Testfälle mit 10 Knoten.} \label{tab:tabpa} \\
+\hline
+\textbf{Testfall} & \textbf{Laufzeit (Sekunden)} & \textbf{Kanten (Länge:Anzahl)} \\
+\hline
+\endfirsthead
+
+\hline
+\textbf{Testfall} & \textbf{Laufzeit (Sekunden)} & \textbf{Kanten (Länge:Anzahl)} \\
+\hline
+\endhead
+
+\hline
+\multicolumn{3}{|r|}{\textit{Fortsetzung auf der nächsten Seite}} \\
+\hline
+\endfoot
+
+\hline
+\endlastfoot
+
+1 & 41,6429 & 2:4, 3:1, 6:1 \\
+2 & 128,4196 & 2:4, 3:1, 7:1 \\
+3 & 31,2159 & 2:2, 6:1 \\
+4 & 45,4415 & 2:5, 3:1, 6:1 \\
+5 & 33,0605 & 2:3, 5:1 \\
+6 & 145,9963 & 2:5, 3:2, 4:2 \\
+7 & 231,6784 & 2:2, 3:1, 4:2, 6:1 \\
+8 & 136,9107 & 2:2, 3:1, 4:3 \\
+9 & 39,9753 & 2:4, 3:2 \\
+10 & 30,6745 & 2:3, 3:2 \\
+\end{longtable}
+
+Im abschließenden Auswertungsschritt wurde untersucht, welchen Einfluss die Anzahl gleicher adjazenter Knotenpaare auf die Laufzeit hat. Hierfür wurden jeweils 10 Testfälle mit 10 Knoten generiert, wobei die Anzahl identischer adjazenter Knoten systematisch von 0 bis 9 variiert wurde. Aus den resultierenden Laufzeiten wurden anschließend der Mittelwert und der Median berechnet (vgl. Abbildung \ref{fig:Sim}).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/SimMeanMedian.png}
+    \caption{Vergleich der Laufzeiten bei 8 Knoten mit unterschiedlicher Gittergröße (5$\times$5 vs. 8$\times$8)}
+    \label{fig:Sim}
+\end{figure}
+Die Ergebnisse zeigen einen insgesamt abnehmenden Trend beider Kennwerte mit zunehmender Anzahl gemeinsamer Knoten: Der Mittelwert fällt von über 1000 Sekunden bei 0 gleichen Knoten kontinuierlich bis auf etwa 5,6 Sekunden bei 9 gleichen Knoten. Ein ähnliches Bild zeigt sich für den Median, der von rund 313 Sekunden auf knapp 5 Sekunden sinkt. Besonders auffällig ist, dass die Laufzeit für 9 gemeinsame Knoten auf ein Niveau absinkt, das vergleichbar mit den Ergebnissen bei 8 Knoten und einem $(5\times5)-$Gitter ist. Dies weist darauf hin, dass eine nahezu vollständige Pfadüberlappung zu sehr einfachen Einbettungen führt, die sich effizient berechnen lassen.\newline 
+Gleichzeitig ist zu beobachten, dass die Laufzeiten bei niedrigen Überlappungen – insbesondere bei 0 und 1 gemeinsamen Knoten – stark streuen. Dies lässt sich dadurch erklären, dass bei geringen strukturellen Gemeinsamkeiten keine simplen Teilstrukturen genutzt werden können, um die Pfade effizient im Gitter unterzubringen. Stattdessen entstehen komplexere Konstellationen mit potenziell längeren Kanten und ungünstigerem Platzbedarf, was wiederum zu erhöhten und stark schwankenden Rechenzeiten führt.\newline 
+Obwohl die Korrelation zwischen der Anzahl gleicher Knoten und der Laufzeit nicht perfekt linear ist, zeigt sich eine klare Tendenz: Höhere strukturelle Überlappungen fördern die Entstehung einfacher, symmetrischer Einbettungen, die sich schnell lösen lassen. Geringe Überlappungen hingegen führen mit höherer Wahrscheinlichkeit zu komplexen Resultaten mit entsprechend längeren Laufzeiten.
+
+
+\section{Diskussion der Ergebnisse}
+Die durchgeführten Experimente zeigen deutlich, dass das entwickelte Modell für kleinere Eingaben äußerst effizient arbeitet. Bei moderaten Knotenzahlen und kompakten Gittergrößen lassen sich selbst mehrere zufällig generierte Testfälle in sehr kurzer Zeit lösen. Das Modell liefert dabei konsistente Ergebnisse mit stabilen Laufzeiten, was auf eine robuste Formulierung und effektive Lösbarkeit im kleineren Maßstab hinweist.\newline 
+Mit zunehmender Komplexität der Eingabeinstanzen – insbesondere bei wachsender Knotenzahl und entsprechend erforderlicher Gittervergrößerung – steigt die Rechenzeit jedoch stark an. Die Auswertungen belegen, dass dieser Anstieg nicht nur auf die wachsende Modellgröße (in Form von Variablen und Nebenbedingungen) zurückzuführen ist, sondern auch auf die strukturelle Komplexität der resultierenden Einbettung. Größere Knotenanzahlen erhöhen die Wahrscheinlichkeit für komplexe Pfadverläufe und lange Kanten, wodurch die Lösungsfindung erheblich erschwert wird.\newline 
+Ab einer bestimmten Problemgröße, insbesondere jenseits von 10 bis 12 Knoten, ist das Modell nicht mehr in vertretbarer Zeit lösbar. Die Laufzeit wächst exponentiell und macht eine Anwendung für größere Instanzen im Praxiseinsatz aktuell nicht realistisch. Insgesamt lässt sich festhalten, dass das Modell zwar korrekt funktioniert und konsistente Ergebnisse liefert, jedoch in seiner derzeitigen Form nicht für großskalige Probleme skaliert.
+
+
+\chapter{Fazit und Ausblick}
+Die experimentellen Ergebnisse haben gezeigt, dass das Modell für kleine bis mittlere Instanzgrößen zuverlässige und schnelle Ergebnisse liefert. Besonders bei Knotenzahlen bis etwa 8 und entsprechend klein gewählten Gittergrößen gelingt es, selbst komplexere Testfälle innerhalb weniger Sekunden zu lösen. Die Laufzeiten sind dabei stabil und gut prognostizierbar. Ab einer Knotenzahl von etwa 12 hingegen steigt die Rechenzeit drastisch an – teils bis in den Stunden- oder gar Tagesbereich. In diesen Fällen ist das Modell in der aktuellen Form nicht mehr praxistauglich. Die Ursache liegt sowohl in der wachsenden Modellgröße durch größere Gitter (mehr Variablen und Nebenbedingungen), als auch in der gestiegenen strukturellen Komplexität der resultierenden Einbettung, die durch überlappende und lange Pfade entsteht.\newline 
+Diese Beobachtungen machen deutlich, dass das Modell zwar konzeptionell korrekt arbeitet, aber in seiner jetzigen Form nicht ausreichend skaliert, um größere Probleminstanzen effizient zu lösen.\newline
+Um die praktische Anwendbarkeit des Modells zu verbessern, bieten sich verschiedene Optimierungsansätze an. Eine vielversprechende Alternative zur exakten Modellierung stellen heuristische  Verfahren dar, wie etwa Greedy-Ansätze oder Simulated Annealing. Mit ihnen lassen sich in akzeptabler Zeit gute Näherungslösungen für größere Instanzen finden. Diese Lösungen können als obere Schranke für das exakte Modell dienen: Kennt man bereits eine gültige, aber nicht optimale Einbettung mit bekanntem Zielfunktionswert, so lassen sich während der Lösungssuche alle Zwischenlösungen verwerfen, deren Kosten diese Schranke überschreiten. Dadurch kann der Suchraum deutlich eingeschränkt und die Laufzeit reduziert werden. Ergänzend hierzu bieten sich Verfahren der Problemvorverarbeitung an, um die Eingabeinstanz bereits vor der eigentlichen Modelllösung effizient zu vereinfachen. Durch gezielte Graphvereinfachung, Symmetrieerkennung oder Clustering lassen sich unnötige Redundanzen im Gittermodell vorab eliminieren und die Rechenzeit deutlich senken.\newline
+Ein weiterer Vorteil des entwickelten Modells liegt in seiner Flexibilität. Die Grundstruktur lässt sich relativ leicht auf andere Anwendungsfälle übertragen oder erweitern. So könnten beispielsweise statt zwei auch drei oder mehr Hamiltonpfade betrachtet werden, um komplexere Szenarien abzubilden. Ebenso wären spezielle Einbettungsanforderungen denkbar – etwa das Erzwingen bestimmter Teilstrukturen, symmetrischer Verläufe oder die Minimierung von Kantenüberschneidungen. Die zugrunde liegende Formulierung ist dabei modular genug aufgebaut, um solche Anpassungen mit vertretbarem Aufwand zu realisieren.\newline 
+Für künftige Arbeiten bietet sich die systematische Untersuchung dieser Erweiterungs- und Optimierungsmöglichkeiten an. Ziel könnte ein hybrider Ansatz sein, der exakte Modellierung für kleine Teilprobleme mit heuristischen Strategien für die Gesamtlösung kombiniert. Ebenso wäre eine Integration von Lernkomponenten (z.,B. zur Abschätzung der Gittergröße oder zur Vorhersage problematischer Instanzen) denkbar, um den Rechenaufwand frühzeitig abschätzen und steuern zu können.\newline 
+Insgesamt zeigt die Arbeit, dass das entwickelte Modell eine solide Grundlage bietet, um strukturierte Mehrpfadeinbettungen zu formulieren und zu lösen – sofern die Instanzgröße dies zulässt. Die Erweiterung in Richtung Skalierbarkeit, Flexibilität und Praxistauglichkeit bleibt ein zentrales Ziel weiterer Forschung.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \bibliographystyle{mybabalpha-fl}

@@ -1,0 +1,46 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+# X-Achse: Knotenanzahl
+knoten = [9, 10, 11]
+
+# Y-Achsen: Mean und Median
+mean = [24.35875, 43.5422, 4104.2201]
+median = [37.74847, 86.49456, 4129.95178]
+
+# Erstellen der Figur und der ersten Achse
+fig, ax1 = plt.subplots(figsize=(8, 5))
+
+# Plot für Mean auf der linken Y-Achse
+color = 'tab:blue'
+ax1.set_xlabel('Knotenanzahl')
+ax1.set_ylabel('Mean', color=color)
+ax1.plot(knoten, mean, marker='o', color=color, label='Mean')
+ax1.tick_params(axis='y', labelcolor=color)
+
+# X-Achse fixieren nur auf 9, 10, 11
+ax1.set_xticks(knoten)
+
+# Y-Achse 1 einstellen
+ax1.set_yscale('log')  # Log-Skala sinnvoll wegen sehr großer Werteunterschiede
+ax1.set_ylim(10, 10000)  # Bereich anpassen (optional)
+
+# Zweite Y-Achse erstellen
+ax2 = ax1.twinx()
+
+# Plot für Median auf der rechten Y-Achse
+color = 'tab:green'
+ax2.set_ylabel('Median', color=color)
+ax2.plot(knoten, median, marker='s', linestyle='--', color=color, label='Median')
+ax2.tick_params(axis='y', labelcolor=color)
+
+# Y-Achse 2 auch log
+ax2.set_yscale('log')
+ax2.set_ylim(10, 10000)
+
+# Titel und Layout
+plt.title('Vergleich von Mean und Median bei Knotenanzahl 9 bis 11')
+
+# Layout anpassen und zeigen
+fig.tight_layout()
+plt.show()

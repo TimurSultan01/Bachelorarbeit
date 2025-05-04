@@ -1,0 +1,28 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Daten für Mean und Median
+mean_values = [1049.0368, 484.01196, 69.80042, 58.27833, 35.13433, 35.60232, 23.87115, 21.06061, 15.69399, 5.59048]
+median_values = [312.65955, 266.65365, 52.8895, 39.8755, 30.35395, 31.0838, 25.78055, 19.81045, 5.93895, 4.97635]
+
+# x-Werte: Anzahl der gemeinsamen adjazenten Knoten
+x = np.arange(10)
+
+# Erstellen der Plot-Figur
+plt.figure(figsize=(10, 6))
+
+# Plot für Mean-Werte und Median-Werte
+plt.plot(x, mean_values, 'b-o', label='Mean', color='blue')  # 'o' fügt Punkte hinzu
+plt.plot(x, median_values, 'o-', label='Median', color='orange')  # 'o' fügt Punkte hinzu
+
+# Achsenbeschriftungen
+plt.xlabel('Anzahl der gemeinsamen adjazenten Knoten')
+plt.ylabel('Werte')
+
+# Titel und Legende
+plt.title('Mean und Median der Laufzeiten in Abhängigkeit der gemeinsamen adjazenten Knoten')
+plt.legend()
+
+# Diagramm anzeigen
+plt.tight_layout()
+plt.show()

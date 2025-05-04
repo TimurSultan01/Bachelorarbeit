@@ -1,0 +1,56 @@
+import matplotlib.pyplot as plt
+
+# Testfälle von 1 bis 10
+testfaelle = list(range(1, 11))
+
+# Dauer der Modellberechnung (Sekunden)
+zeiten = [
+    41.6429,
+    128.4196,
+    31.2159,
+    45.4415,
+    33.0605,
+    145.9963,
+    231.6784,
+    136.8107,
+    39.9753,
+    30.6745
+]
+
+# Objektivwerte
+objektivwerte = [
+    27.0,
+    26.0,
+    22.0,
+    28.0,
+    22.0,
+    28.0,
+    31.0,
+    29.0,
+    23.0,
+    21.0
+]
+
+# Erstelle das Diagramm mit zwei Achsen
+fig, ax1 = plt.subplots(figsize=(10, 6))
+
+# Linke Y-Achse: Berechnungsdauer
+ax1.set_xlabel('Testfall')
+ax1.set_ylabel('Laufzeit (Sekunden)', color='royalblue')
+ax1.plot(testfaelle, zeiten, marker='o', linestyle='-', color='royalblue', label='Dauer')
+ax1.tick_params(axis='y', labelcolor='royalblue')
+
+# Rechte Y-Achse: Objektivwert
+ax2 = ax1.twinx()
+ax2.set_ylabel('Objektivwert', color='darkorange')
+ax2.plot(testfaelle, objektivwerte, marker='s', linestyle='--', color='darkorange', label='Objektivwert')
+ax2.tick_params(axis='y', labelcolor='darkorange')
+
+# Titel und Layout
+plt.title('Laufzeit & Objektivwert pro Testfall', fontsize=14)
+fig.tight_layout()
+plt.grid(True)
+
+# Speichern und anzeigen
+plt.savefig('dauer_und_objektivwert.png')
+plt.show()

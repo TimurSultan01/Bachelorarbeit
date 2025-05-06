@@ -68,7 +68,7 @@ def plot_solution(D, assign, flow, gridEdges, edges, V):
 
         # Bestimme die Farbe anhand der Benutzung:
         if use_path1 and use_path2:
-            color = 'purple'
+            color = 'green'
         elif use_path1:
             color = 'blue'
         elif use_path2:

@@ -18,6 +18,7 @@
 \usepackage{multirow}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage[dvipsnames]{xcolor}
 
 
 \captionsetup[figure]{name=Fig.}
@@ -47,8 +48,8 @@ Prof.\ Dr.\ Stefan Näher}
 
 
 \begin{abstract}
-Diese Arbeit beschäftigt sich mit der Modellierung und Optimierung von überlappenden Pfadstrukturen auf einem zweidimensionalen Gitter. Ziel ist es, zwei Hamiltonpfade in einem Gitter so einzubetten, dass sie sich nicht selbst schneiden und gleichzeitig möglichst wenige Gitterkanten nutzen. Zu diesem Zweck wurde ein lineares Optimierungsmodell formuliert, das sowohl die Pfade selbst als auch deren Überlappung über Variablen und Nebenbedingungen abbildet. Zur Validierung wurde ein Python-Skript entwickelt, das automatisiert Testfälle erzeugt und die Einhaltung der Modellrestriktionen überprüft.\newline 
-Die experimentelle Evaluation zeigt, dass das Modell für kleinere Instanzen mit wenigen Knoten und geringer Gittergröße effizient Lösungen berechnet. Mit zunehmender Knotenzahl und Gitterdimension steigen jedoch sowohl die Modellkomplexität als auch die Rechenzeiten stark an. Insbesondere ab etwa 12 Knoten ist das Modell in der Praxis nicht mehr anwendbar, da die Laufzeit exponentiell wächst und sich stark zwischen einzelnen Testfällen unterscheidet. Eine detaillierte Analyse zeigt, dass diese Varianz nicht allein durch einfache Metriken wie Pfadlänge oder Überlappung erklärbar ist, sondern stark von der strukturellen Komplexität der resultierenden Einbettung abhängt.\newline 
+Diese Arbeit beschäftigt sich mit der Modellierung und Optimierung von 2 Graphen auf der gleichen Knotenmenge auf einem zweidimensionalen Gitter. Ziel ist es, zwei Hamiltonpfade in einem Gitter so einzubetten, dass sie sich nicht selbst schneiden und gleichzeitig möglichst wenige Gitterkanten nutzen. Zu diesem Zweck wurde ein lineares Optimierungsmodell formuliert, das sowohl die Pfade selbst als auch deren Überlappung über Variablen und Nebenbedingungen abbildet. Zur Validierung wurde ein Python-Skript entwickelt, das automatisiert Testfälle erzeugt und die Einhaltung der Modellrestriktionen überprüft.\newline 
+Die experimentelle Evaluation zeigt, dass das Modell für kleinere Instanzen mit wenigen Knoten und geringer Gittergröße effizient Lösungen berechnet. Mit zunehmender Knotenzahl und Gitterdimension steigen jedoch sowohl die Modellkomplexität als auch die Rechenzeiten stark an. Insbesondere ab etwa 12 Knoten ist das Modell in der Praxis nicht mehr anwendbar, da die Laufzeit sehr schnell wächst und sich stark zwischen einzelnen Testfällen unterscheidet. Eine detaillierte Analyse zeigt, dass diese Varianz nicht allein durch einfache Metriken wie Pfadlänge oder Überlappung erklärbar ist, sondern stark von der strukturellen Komplexität der resultierenden Einbettung abhängt.\newline 
 Die Arbeit schließt mit einer Diskussion möglicher Optimierungsansätze sowie einem Ausblick auf potenzielle Erweiterungen des Modells, etwa für mehr als zwei Pfade oder spezifische Einbettungsanforderungen. Insgesamt zeigt sich, dass das Modell eine robuste Grundlage für strukturierte Pfadeinbettung darstellt – jedoch nur für moderat große Instanzen praktisch einsetzbar ist
 \end{abstract}
 
@@ -57,13 +58,13 @@ Die Arbeit schließt mit einer Diskussion möglicher Optimierungsansätze sowie 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Einleitung}
 \section{Motivation und Relevanz des Themas}
-Das \emph{Simultaneous Embedding} problematisiert die gleichzeitige Visualisierung mehrerer Graphen auf derselben Knotenmenge. Insbesondere wenn sich diese gemeinsamen Teilstrukturen nur in einer Kante oder in wenigen Pfaden unterscheiden, ist eine konsistente Darstellung essentiell, um Unterschiede direkt zu erkennen und zu analysieren. In vielen Szenarien ist es notwendig, mehrere zusammenhängende Strukturen gleichzeitig und ohne visuelle Konflikte abzubilden, um deren Beziehungen und Interaktionen besser nachvollziehbar zu machen. Typische Anwendungsfelder sind \cite{Handbook}:
+Das \emph{Simultaneous Embedding} behandelt die gleichzeitige Visualisierung mehrerer Graphen auf derselben Knotenmenge. Insbesondere wenn sich diese gemeinsamen Teilstrukturen nur in einer Kante oder in wenigen Pfaden unterscheiden, ist eine konsistente Darstellung essentiell, um Unterschiede direkt zu erkennen und zu analysieren. In vielen Szenarien ist es notwendig, mehrere zusammenhängende Strukturen gleichzeitig und ohne visuelle Konflikte abzubilden, um deren Beziehungen und Interaktionen besser nachvollziehbar zu machen. Typische Anwendungsfelder sind nach \cite{Handbook}:
 \begin{itemize}
   \item \textbf{Schaltkreisdesign:} Beim Entwurf integrierter Schaltkreise (ICs) müssen zahlreiche Leitungsverbindungen auf kleinstem Raum untergebracht werden. Jeder Pfad entspricht dabei einer elektrischen Verbindung, die auf dem Chip realisiert werden muss. Eine platzsparende Einbettung hilft, die Fläche des Chips zu minimieren, was sowohl Produktionskosten als auch Signalverzögerungen und Energieverbrauch reduziert.
   \item \textbf{Netzwerkplanung:} Beim Vergleich alternativer Verbindungsstrukturen - etwa bei Verkehrs- oder Kommunikationsnetzen - erlaubt die simultane Darstellung mehrerer Routen eine direkte Analyse von Engpässen, Redundanzen und Alternativen, wodurch fundierte Planungsentscheidungen getroffen werden können.
   \item \textbf{Soziale Netzwerke:} Bei der Visualisierung von sozialen Netzwerken, in denen Benutzer durch Kanten (Freundschaften, Beziehungen, Interaktionen) verbunden sind, kann eine simultane Einbettung genutzt werden, um verschiedene Gruppen von Nutzern oder Communitys nebeneinander darzustellen. Dadurch können interessante Strukturen wie Cluster, Gemeinschaften und Verbindungen zwischen verschiedenen Gruppen sichtbar gemacht werden.
 \end{itemize}
-In dieser Arbeit betrachten wir das spezielle Szenario der simultanen Pfadeinzeichnung zweier Graphen mit gleicher Knotenmenge, die auf einem orthogonalen Gitter dargestellt werden. Dabei bestehen alle Kanten ausschließlich aus horizontalen und vertikalen Liniensgementen - eine Darstellungsweise, die besonders in technischen Anwendungen wie Leiterplattenentwurf bevorzugt wird. Der resultierende Graph wird als Multigraph interpretiert, d.h. zwischen zwei Knoten können mehrere Kanten existieren. Ziel ist es, eine kompakte Darstellung zu erzeugen, die möglichst wenig Fläche benötigt und dennoch die strukturellen Unterschiede zwischen den Pfaden klar erkennen lässt. Es sei an dieser Stelle darauf hingewiesen, dass in dieser Arbeit Überschneidungen der Pfade erlaubt sind, jedoch nur zwischen den Pfaden selbst, nicht aber innerhalb eines Pfades.
+In dieser Arbeit betrachten wir das spezielle Szenario der simultanen Pfadeinzeichnung zweier Graphen mit gleicher Knotenmenge, die auf einem orthogonalen Gitter dargestellt werden. Dabei bestehen alle Kanten ausschließlich aus horizontalen und vertikalen Liniensgementen - eine Darstellungsweise, die besonders in technischen Anwendungen wie Schaltungslayouts bevorzugt wird \cite{Takao}. Der resultierende Graph wird als Multigraph interpretiert, d.h. zwischen zwei Knoten können mehrere Kanten existieren. Ziel ist es, eine kompakte Darstellung zu erzeugen, die möglichst wenig Fläche benötigt und dennoch die strukturellen Unterschiede zwischen den Pfaden klar erkennen lässt. Es sei an dieser Stelle darauf hingewiesen, dass in dieser Arbeit Überschneidungen der Pfade erlaubt sind, jedoch dürfen sich die Pfade nicht selbst schneiden.
 Ein anschauliches Beispiel für eine orthogonale simultane Einbettung zweier Pfade auf demselben Gitter zeigt \Cref{fig:simultaneous}. Der hier gezeichnete Multigraph besteht aus denselben Knoten, auf denen zwei unterschiedliche Pfade so eingebettet sind, sodass der benötigte Platz minimiert wird und dennoch die Pfadstrukturen gut unterscheidbar bleiben.
 \begin{figure}[H]
     \begin{minipage}{0.5\textwidth}
@@ -74,8 +75,8 @@ Ein anschauliches Beispiel für eine orthogonale simultane Einbettung zweier Pfa
     \end{minipage}
     \begin{minipage}{0.5\textwidth}
     \small
-        In der Abbildung sind die Gitterkanten farblich markiert: \textcolor{blue}{blau}, wenn sie ausschließlich vom ersten Pfad verwendet werden, \textcolor{red}{rot}, wenn sie ausschließlich vom zweiten Pfad verwendet werden, und \textcolor{violet}{violett}, wenn beide Pfade denselben Abschnitt nutzen. \\
-        Der erste Pfad verläuft vom Knoten 2 zum Knoten 8, während der zweite Pfad beim Knoten 4 beginnt und beim Knoten 2 endet.
+        In der Abbildung sind die Gitterkanten farblich markiert: \textcolor{blue}{blau}, wenn sie ausschließlich vom ersten Pfad verwendet werden, \textcolor{red}{rot}, wenn sie ausschließlich vom zweiten Pfad verwendet werden, und \textcolor{OliveGreen}{grün}, wenn beide Pfade denselben Abschnitt nutzen. \\
+        Der erste Pfad verläuft von Knoten 2 zu Knoten 8, während der zweite Pfad bei Knoten 4 beginnt und bei Knoten 2 endet.
     \end{minipage}
 \end{figure}
 
@@ -87,7 +88,7 @@ Zu Beginn der Arbeit werden die wesentlichen Begriffe aus dem Graphzeichnen und 
 
 
 \chapter{Theoretische Grundlagen}
-Die theoretischen Grundlagen dieser Arbeit bilden das Fundament für das Verständnis der angewandten Methoden und Modelle im Bereich der Grapheneinbettung und der Linearen Programmierung. Zunächst werden die grundlegenden Definitionen der Graphentheorie vorgestellt, gefolgt von einer Einführung in gängige Methoden und Modelle des Graph Drawings. Danach werden die Besonderheiten und Herausforderungen des Simultaneous Embedding-Problems erläutert. Anschließend werden die grundlegenden Konzepte und Lösungsverfahren der linearer Programmierung vorgestellt und der Stand der Forschung und verwandte Arbeiten präsentiert.
+Die theoretischen Grundlagen dieser Arbeit bilden das Fundament für das Verständnis der angewandten Methoden und Modelle im Bereich der Grapheneinbettung und der Linearen Programmierung. Zunächst werden die grundlegenden Definitionen der Graphentheorie vorgestellt, gefolgt von einer Einführung in gängige Methoden und Modelle des Graphzeichnens. Danach werden die Besonderheiten und Herausforderungen des Simultaneous Embedding-Problems erläutert. Anschließend werden die grundlegenden Konzepte und Lösungsverfahren der linearen Programmierung vorgestellt und der Stand der Forschung und verwandte Arbeiten präsentiert.
 
 \section{Grundlagen der Graphentheorie}
 Wir beginnen mit den grundlegenden Definitionen der Graphentheorie, welche die Basis für die in dieser Arbeit behandelten Probleme darstellen. Wir folgen hierbei der Notation aus dem Buch \textit{Graph Theory} von Diestel \cite{GraohTh}. Ein endlicher Graph $G = (V,E)$ besteht aus einer endlichen Menge von Knoten $V$ und einer endlichen Menge von Kanten $E \subseteq V \times V$. Ein \textit{Multigraph} ist ein spezieller Graph, bei dem zusätzlich ein Mapping $M$ existiert mit $M: E \rightarrow V \cup [V]^2$, das jeder Kante ein oder zwei Endknoten zuordnet. Diese Graphen können dadurch die gleiche Kante mehrmals enthalten. Wir sagen, dass eine Kante $e = (u,v)$ \textit{inzident} ist zu $u$ und $v$. Die zwei Knoten betitelt man auch als die \textit{Endknoten} von $e$ und als \textit{adjazent} zueinander. Der \textit{Grad eines Knoten} ist die Anzahl an Kanten, die zum Knoten inzident sind. \newline
@@ -98,7 +99,7 @@ Konkret sind Graphen dafür geeignet, Relationen zwischen Objekten zu beschreibe
 
 \subsection{Graphzeichnen: Methoden und Modelle}
 
-Das Graphzeichnen befasst sich mit der visuellen Darstellung von Graphen im zweidimensionalen oder dreidimensionalen Raum. Das zentrale Problem bei Graphzeichnen lautet: Wie soll ein Graph gezeichnet werden, sodass die Informationen bestmöglich dargestellt werden? Wie schon festgestellt wurde, haben Graphen viele unterschiedliche Anwendungsbereiche. Aus diesen resultieren auch viele verschiedene Anforderungen an die visuelle Darstellung dieser Graphen.\newline
+Das Graphzeichnen befasst sich mit der visuellen Darstellung von Graphen im zweidimensionalen oder dreidimensionalen Raum. Das zentrale Problem des Graphzeichnens lautet: Wie soll ein Graph gezeichnet werden, sodass die Informationen bestmöglich dargestellt werden? Wie schon festgestellt wurde, haben Graphen viele unterschiedliche Anwendungsbereiche. Aus diesen resultieren auch viele verschiedene Anforderungen an die visuelle Darstellung dieser Graphen.\newline
 Es gibt zumindest einige allgemeine Konzepte und Techniken, die eine große Anzahl an Anwendungsbereichen abdecken. Ein gutes Layout zu erstellen, ist somit oft damit verbunden, ein oder mehrere dieser Kriterien zu optimieren. Im Buch \textit{Drawing Graphs: Methods and Models} \cite{DrawingMeth} werden einige ästhetische Kriterien benannt. Es werden nun die Kriterien aufgezählt, die im Kontext der simultanen Einbettung wichtig sind: 
 \begin{itemize}
     \item  \textbf{Kreuzungsminimierung:} Wenn zu viele Kreuzungen von Kanten existieren, dann fällt es dem menschlichen Auge schwerer zu sehen, welche Knoten durch die Kanten verbunden sind. Ist eine Zeichnung ohne Kreuzung möglich, dann sind diese oft zu bevorzugen. Die Minimierung von Kreuzungen ist auch ein wichtiges technisches Kriterium in Gebieten wie Schaltplänen, um die Anzahl an Schichten zu reduzieren.
@@ -107,8 +108,8 @@ Es gibt zumindest einige allgemeine Konzepte und Techniken, die eine große Anza
     \item  \textbf{Kantenlängenminimierung:} Die Kantenlängenminimierung verbessert die Lesbarkeit, da nahe beieinanderliegende Knoten Zusammenhänge schneller erkennbar machen. Besonders in der Verkehrsnetzplanung werden Kanten möglichst kurz gehalten, um Straßen effizient zu platzieren und die Übersichtlichkeit der Karte zu erhöhen.
 \end{itemize}
 Nachdem nun grundlegende ästhetische Kriterien für Graphenzeichnung erläutert wurden, soll im Folgenden auf verschiedene spezielle Zeichnungsmodelle eingegangen werden. Diese Modelle beschreiben konkrete Konventionen und Regeln, nach denen Graphen unter bestimmten geometrischen und technischen Beschränkungen visualisiert werden.\newline
-Je nach Anwendungsgebiet kommen unterschiedliche Darstellungsformen zum Einsatz, um spezifische Anforderungen - wie etwa eine klare Strukturierung, Platzersparnis oder technische Umsetzbarkeit – zu erfüllen. Zu den bekanntesten und am häufigsten verwendeten Modellen zählen orthogonale Zeichnungen, Straight-Line-Zeichnungen und Rectangle Drawings, aber auch weitere Varianten, die je nach Problemstellung bevorzugt werden.
-Im Folgenden werden zwei von diesen speziellen Zeichnungsmodelle vorgestellt\cite{Handbook}.\newline \newline
+Je nach Anwendungsgebiet kommen unterschiedliche Darstellungsformen zum Einsatz, um spezifische Anforderungen - wie etwa eine klare Strukturierung, Platzersparnis oder technische Umsetzbarkeit – zu erfüllen. Zu den bekanntesten und am häufigsten verwendeten Modellen zählen orthogonale Zeichnungen und Straight-Line-Zeichnungen, aber auch weitere Varianten, die je nach Problemstellung bevorzugt werden.
+Im Folgenden werden zwei von diesen speziellen Zeichnungsmodellen vorgestellt\cite{Handbook}.\newline \newline
 Ein \textbf{Straight-Line Drawing}  eines Graphen $G = (V,E)$ ist eine Einbettung von $G$ in die Ebene, bei der jeder Knoten $v \in V$ als eindeutiger Punkt im $\mathbb{R}^2$ dargestellt wird und jede Kante $e = (u,v) \in E$ durch ein gerades Liniensegment zwischen den Punkten $u$ und $v$ repräsentiert wird. Alle Kanten sind dabei gerade und enthalten keine Biegungen.\newline
 
 Eine \textbf{orthogonale Zeichnung} eines Graphen $G = (V,E)$ ist eine Einbettung von $G$ in die Ebene, bei der jeder Knoten $v \in V$ als Punkt im $\mathbb{R}^2$ dargestellt wird und jede Kante $e = (u,v) \in E$ ausschließlich aus horizontalen und vertikalen Liniensegmenten besteht. Kanten können dabei rechtwinklige Biegungen enthalten.\newline
@@ -192,7 +193,7 @@ Ein klassisches LP- Problem wird folgendermaßen formuliert
 \end{definition}
 Neben der klassischen linearen Programmierung gibt es auch die \textbf{ganzzahlige lineare Programmierung(ILP)}, die ein spezielles Unterfeld darstellt. Bei einem ILP-Problem handelt es sich um ein lineares Optimierungsproblem, bei dem einige oder alle Variablen ganzzahlige Werte annehmen müssen. Dies führt zu einer wesentlich höheren Komplexität, sowohl in theoretischer als auch in praktischer Hinsicht.\newline
 In der Komplexitätstheorie bezeichnet \textbf{P}  die Klasse von Entscheidungsproblemen, die sich mit einem deterministischen Algorithmus in polynomieller Zeit lösen lassen. Die Klasse \textbf{NP} (nichtdeterministisch polynomiell) umfasst Probleme, bei denen eine gefundene Lösung in polynomieller Zeit überprüft werden kann – selbst wenn die Berechnung dieser Lösung selbst möglicherweise exponentiellen Aufwand erfordert.\newline
-LPs, bei denen alle Variablen reelle Werte annehmen können, gehören zur Komplexitätsklasse P und sind damit nicht NP-hart. Dies bedeutet, dass LPs in polynomieller Zeit gelöst werden können. Zwei bekannte und oft eingesetzte Methoden zur Lösung von LPs sind das \emph{Simplex-Verfahren} und die \emph{Interior-Point-Methoden} \cite{LinearProg}.  Das Simplex-Verfahren, obwohl in der Praxis sehr effizient, hat keine garantierte polynomiale Laufzeit. Es kann im schlimmsten Fall exponentielle Zeit benötigen, um die optimale Lösung zu finden, auch wenn es für viele reale Probleme erstaunlich schnell konvergiert. Innere-Point-Methoden hingegen bieten eine polynomiale Laufzeitgarantie und stellt sicher, dass eine optimale Lösung in polynomieller Zeit gefunden wird. Diese Methoden haben das Problem der exponentiellen Laufzeit beim Simplex-Verfahren effektiv gelöst und sind insbesondere für größere Probleme von Bedeutung.\newline
+LPs, bei denen alle Variablen reelle Werte annehmen können, gehören zur Komplexitätsklasse P und sind damit nicht NP-hart. Dies bedeutet, dass LPs in polynomieller Zeit gelöst werden können. Zwei bekannte und oft eingesetzte Methoden zur Lösung von LPs sind das \emph{Simplex-Verfahren} und die \emph{Interior-Point-Methoden} \cite{LinearProg}.  Das Simplex-Verfahren, obwohl in der Praxis sehr effizient, hat keine garantierte polynomiale Laufzeit. Es kann im schlimmsten Fall exponentielle Zeit benötigen, um die optimale Lösung zu finden, auch wenn es für viele reale Probleme erstaunlich schnell konvergiert. Innere-Point-Methoden hingegen bieten eine polynomiale Laufzeitgarantie und stellen sicher, dass eine optimale Lösung in polynomieller Zeit gefunden wird. Diese Methoden haben das Problem der exponentiellen Laufzeit beim Simplex-Verfahren effektiv gelöst und sind insbesondere für größere Probleme von Bedeutung.\newline
 Im Gegensatz zu LPs, die effizient gelöst werden können, gehören ILPs zur NP-harten Klasse. Dies bedeutet, dass ILPs nicht in polynomieller Zeit gelöst werden können, es sei denn, P=NP. Die Entscheidung, ob eine optimale Lösung existiert, oder die Suche nach der optimalen Lösung ist für ILPs wesentlich schwieriger als bei LPs, weil die Variablen nur ganze Zahlen annehmen dürfen. Diese zusätzliche Einschränkung führt dazu, dass der Lösungsraum nicht mehr konvex ist. Ein konvexes Optimierungsproblem zeichnet sich dadurch aus, dass die Zielfunktion und der zulässige Bereich eine einfache Struktur haben, die es ermöglicht, das globale Optimum effizient zu finden. Bei konvexen Problemen garantiert die Struktur, dass es keine lokalen Minima gibt, die das Finden der besten Lösung erschweren. Daher können konvexe Probleme mit polynomiellen Algorithmen wie dem Simplex-Verfahren oder Interior-Point-Verfahren effizient gelöst werden. Ein ILP-Problem zu lösen, bedeutet, über alle möglichen ganzzahligen Lösungen nachzudenken, was zu einer enormen Zunahme der Komplexität führt.\newline
 Ein klassisches Beispiel für ein ILP ist das \textbf{Travelling Salesman Problem (TSP)}. Bei diesem Problem geht es darum, einen kürzesten Rundweg zu finden, der alle Städte in einer gegebenen Liste genau einmal besucht und zum Ausgangspunkt zurückkehrt. Dieses NP-harte Problem kann als ILP formuliert werden, bei dem jede Entscheidung, ob eine bestimmte Stadt direkt vor einer anderen besucht wird, als binäre Variable dargestellt wird.\newline
 Ein weiteres Beispiel ist das \textbf{quadratische Zuordnungsproblem (QAP)}. Bei diesem Problem geht es darum, $n$ gleichgroße Maschinen in $n$ gleichgroße Plätze so zu platzieren, dass die Gesamtkosten für den Materialtransport zwischen den Maschinen minimiert wird. Die Kosten hängen dabei von der Entfernung zwischen den Maschinen und der Häufigkeit ab, mit der Materialien transportiert werden müssen. Das QAP kann als ILP formuliert werden, bei dem jede Entscheidung, welche Maschine an welchen Standorten platziert werden, durch binäre Variablen dargestellt wird.
@@ -241,20 +242,33 @@ Die Ergebnisse zeigen, dass ILP ein leistungsfähiges Werkzeug zur Optimierung o
 
 \chapter{Methodik und Modellierung}
 \section{Formulierung des Problems als ILP}
-Es sei $G = (V,E)$ der Multigraph der in ein Gitter $D=(P,F)$ eingebettet werden soll, wobei $V=\{v_1,v_2,\dots, v_n\} $ die Knoten und $E=\{e_1, e_2, \dots, e_n\}$ die entsprechenden Kanten darstellen. Das Gitter ist hierbei ein Tupel aus Gitterpunkten $P=\{(x,y) \mid (x,y) \in \mathbb{Z^2} \}$ und Gitterkanten $F=\{(p,q) \mid p,q \in P\}$. Die Kanten kann man nun in zwei Mengen partitionieren, denen man dann zwei verschiedenen Hamiltonpfaden zuordnet. Ziel ist es nun, diese zwei Pfade so auf einem Gitter zu zeichnen, sodass diese für sich gesehen planar auf diesem Gitter eingebettet sind. Dabei soll dies möglichst optimiert bezüglich des genutzten Platzes auf einem Gitter $D=(P,F)$ vollzogen werden. Es ist also erlaubt, dass sich die Pfade gegenseitig kreuzen können. \Cref{fig:Grid_Example} veranschaulicht erlaubte Zeichnungen von zwei Pfaden auf dem Gitter. \newline
+Es sei $G = (V,E)$ der Multigraph der in ein Gitter $D=(P,F)$ eingebettet werden soll, wobei $V=\{v_1,v_2,\dots, v_n\} $ die Knoten und $E=\{e_1, e_2, \dots, e_n\}$ die entsprechenden Kanten darstellt. Das Gitter ist hierbei ein Tupel aus Gitterpunkten $P=\{(x,y) \mid (x,y) \in \mathbb{Z^2} \}$ und Gitterkanten $F=\{(p,q) \mid p,q \in P\}$. Die Kanten kann man nun in zwei Mengen partitionieren, denen man dann zwei verschiedenen Hamiltonpfaden zuordnet. Ziel ist es nun, diese zwei Pfade so auf einem Gitter zu zeichnen, sodass diese für sich gesehen planar auf diesem Gitter eingebettet sind. Dabei soll dies möglichst optimiert bezüglich des genutzten Platzes auf einem Gitter $D=(P,F)$ vollzogen werden. Es ist also erlaubt, dass sich die Pfade gegenseitig kreuzen können. \Cref{fig:Grid_Example} veranschaulicht erlaubte Zeichnungen von zwei Pfaden auf dem Gitter. \newline
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/Erlaubt.png}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/Erlaubt.pdf}
+        \caption{Erlaubte Zeichnung}
+        \label{fig:erlaubt}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/Unerlaubt.pdf}
+        \caption{Verbotene Zeichnung}
+        \label{fig:unerlaubt}
+    \end{subfigure}
+    \hfill
     \caption{Erlaubte und verbotene Zeichnungen}
     \label{fig:Grid_Example}
 \end{figure}
 Um für diese Aufgabenstellung ein entsprechendes ganzzahliges lineares Optimierungsproblem zu formulieren, werden zuerst Variablen definiert, sodass danach eine Zielfunktion und Nebenbedingungen geschaffen werden können. \newline
-Jeden Knoten $v \in V$ muss einem Gitterpunkt $p \in D$ zugeordnet werden, auf welchem der Knoten platziert wird. Hierfür definieren wir für alle Knoten $v \in V$ und jeden Gitterpunkt $p \in D$ die Variable $\sigma(v,p)$. Gilt nun, dass der Knoten $v$ auf dem Gitterpunkt $p$ liegt, dann $\sigma(v,p) = 1$, ansonsten $\sigma(v,p) = 0$.  \newline
+Jeden Knoten $v \in V$ muss einem Gitterpunkt $p \in D$ zugeordnet werden, auf welchem der Knoten platziert wird. Hierfür definieren wir für alle Knoten $v \in V$ und jeden Gitterpunkt $p \in D$ die Variable $\sigma(v,p)$. Gilt nun, dass der Knoten $v$ auf dem Gitterpunkt $p$ liegt, dann gilt $\sigma(v,p) = 1$, ansonsten gilt $\sigma(v,p) = 0$.  \newline
 Für jede Kante $e \in E$ und jede Gitterkante $(p,q) \in F$ benötigen wir zudem noch eine Variable $\mu(e,p,q)$, die analog zu $\sigma(v,p)$ den Wert 1 annimmt, wenn die Kante $e$ die Gitterkante $(p,q)$ belegt, ansonsten den Wert 0.\newline
 \begin{figure}[H]
     \begin{minipage}{0.45\textwidth}
     \centering
-    \includegraphics{figures/Variabelsetzung.png}
+    \includegraphics{figures/Variabelsetzung.pdf}
     \caption{Visualisierung einer Belegung in einem Gittergraphen}
     \label{fig:Var_Example}
     \end{minipage}
@@ -284,7 +298,7 @@ Damit gilt, dass jeder Gitterpunkt von höchstens einem Knoten belegt wird, muss
     \tag{2}
 \end{equation}
 Nun müssen wir sicherstellen, dass auch die Kanten der Pfade korrekt eingebettet werden. Kanten dürfen nicht abrupt stoppen und an einer komplett anderen Stelle weiterlaufen. Zudem dürfen sie nicht über platzierte Knoten laufen. Auch ist es wichtig, dass der Pfad sich nicht selbst kreuzen darf. Um all dies zu verhindern, sind einige Nebenbedingungen notwendig. \newline
-Damit Kanten kontinuierlich sind beobachten wir, wie sich eine Kante $e \in E$ mit $e = (u,v)$ verhält. Seien nun $\sigma(u,p) = 1 \land \sigma(v,q) = 1$ für beliebige $p,q \in D, p \neq q$. Man sieht, dass die Kante $e$ den Gitterpunkt $p$ genau einmal ausgehend verlässt und eine Gitterkante zu einem anderen Gitterpunkt dafür benutzt.  Da Pfade kreisfrei sind, gibt es keine eingehende benutzte Gitterkante und nicht noch mehr ausgehend benutzte Gitterkanten beim Startknoten. Analog gilt dies für den Endknoten $v$ dieser Kante. Für alle anderen Gitterpunkte $r \in D, r \neq p,q$ gilt nun, dass die Kante $e$ diese möglicherweise passiert. In diesem Fall benutzt $e$ eine eingehende Gitterkante und eine entsprechende ausgehende Gitterkante. Passiert $e$ einen Gitterpunkt nicht, dann gibt es weder eingehende noch ausgehende benutzte Gitterkanten an dem Punkt. In jedem Fall kann man schließen, dass die Summe an eingehenden Gitterkanten und ausgehenden Gitterkanten an einem Gitterpunkt, die die Kante $e$ benutzt, identisch sein müssen außer an den Positionen der Endknoten $u,v$, bei der die Differenz gleich 1 ist, damit es keine abrupten Kantenabbrüche existieren und zudem gesichert ist, dass die Kante bei $u$ anfängt und $v$ endet. Als Nebenbedingung formuliert: 
+Damit Kanten kontinuierlich sind beobachten wir, wie sich eine Kante $e \in E$ mit $e = (u,v)$ verhält. Seien nun $\sigma(u,p) = 1 \land \sigma(v,q) = 1$ für beliebige $p,q \in D, p \neq q$. Man sieht, dass die Kante $e$ den Gitterpunkt $p$ genau einmal ausgehend verlässt und eine Gitterkante zu einem anderen Gitterpunkt dafür benutzt.  Da Pfade kreisfrei sind, gibt es keine eingehende benutzte Gitterkante und nicht noch mehr ausgehend benutzte Gitterkanten beim Startknoten. Analog gilt dies für den Endknoten $v$ dieser Kante. Für alle anderen Gitterpunkte $r \in D, r \neq p,q$ gilt nun, dass die Kante $e$ diese möglicherweise passiert. In diesem Fall benutzt $e$ eine eingehende Gitterkante und eine entsprechende ausgehende Gitterkante. Passiert $e$ einen Gitterpunkt nicht, dann gibt es weder eingehende noch ausgehende benutzte Gitterkanten an dem Punkt. In jedem Fall kann man schließen, dass die Summe an eingehenden Gitterkanten und ausgehenden Gitterkanten an einem Gitterpunkt, die die Kante $e$ benutzt, identisch sein müssen außer an den Positionen der Endknoten $u,v$, bei der die Differenz gleich 1 ist, damit es keine abrupten Kantenabbrüche existieren und zudem gesichert ist, dass die Kante bei $u$ anfängt und $v$ endet. Als Nebenbedingung ergibt sich: 
 \begin{equation}
     \forall e=(u,v) \in E, u,v \in V, \forall p \in D: \sum_{(p,q) \in F} \mu(e,p,q) - \sum_{(q,p) \in F} \mu(e,q,p) = \sigma(u,p) - \sigma(v,p)
     \tag{3}
@@ -294,7 +308,7 @@ In \Cref{fig:Kontinuierlich} wird die Gültigkeit dieser Nebenbedingung verdeutl
 \begin{figure}[H]
     \begin{minipage}{0.5\textwidth}
     \centering
-    \includegraphics{figures/Kontinuierlich.png}
+    \includegraphics{figures/Kontinuierlich.pdf}
     \caption{Beispiel für eine kontinuierliche Kante $e=(u,v)$ und eine ungültige Kante $e'=(u',v')$}
     \label{fig:Kontinuierlich}
     \end{minipage}
@@ -314,7 +328,7 @@ flow\_sum \leq 2 \cdot (1 - \sigma(w,p))
 \begin{figure}[H]
     \begin{minipage}{0.45\textwidth}
     \centering
-    \includegraphics{figures/OverNodePoint.png}
+    \includegraphics{figures/OverNodePoint.pdf}
     \caption{Beispiel für eine Kante $e=(u,v)$, die über einen Knoten $w$ verläuft}
     \label{fig:OverNodePoint}
     \end{minipage}
@@ -361,7 +375,7 @@ Für die Durchführung der Experimente und Testreihen wurde das Modell auf einer
 Für die experimentelle Evaluierung des entwickelten ILP-Modells wurden verschiedene Testfälle konzipiert, die unterschiedliche Aspekte der Modellleistung beleuchten. Zunächst wurde ein Test entworfen, bei dem die Anzahl der Knoten sukzessive erhöht wird, um den Einfluss der Problemgröße auf die Laufzeit, die Anzahl der Variablen und die Komplexität des Modells zu untersuchen. Dabei wird die Knotenzahl von 5 bis 11 gestaffelt, und für jede Knotenzahl werden 10 zufällig generierte Instanzen betrachtet. Diese Zufallsexemplare werden mittels eines Python-Skripts erzeugt, wobei für jede Instanz die Knoten zufällig sortiert werden, um unterschiedliche Pfadkonstellationen zu simulieren. Die Gittergröße wird hierbei dynamisch angepasst – jeweils auf $(\left\lceil n/2 \right\rceil+1 \times \left\lceil n/2 \right\rceil+1),$ wobei $n$ die aktuelle Anzahl der Knoten darstellt – um ausreichend Platz zu bieten, ohne das Modell unnötig zu erweitern.\newline
 Ein weiterer Testfall dient der Untersuchung, wie sich die Überlappung der beiden Pfade – gemessen an der Anzahl gemeinsamer adjazenter Knoten – auf die Laufzeit des Modells auswirkt. Für diesen Test wird die Knotenzahl konstant auf 10 festgelegt, ebenso die Gittergröße, welche auf $(6 \times 6)$ fixiert ist. Es werden jeweils 10 Testfälle erzeugt, bei denen die beiden Pfade genau $x$ gemeinsame adjazente Knoten besitzen. Der Wert $x$ variiert dabei sukzessive, beginnend bei 9 gleichen adjazenten Knoten (also vollständige Überlappung) bis hin zu 0 gleichen adjazenten Knoten (völlig disjunkte Pfade). Ein eigens entwickeltes Python-Skript gewährleistet dabei die Einhaltung der gewünschten Anzahl gemeinsamer adjazenter Knoten zwischen den Pfaden. Durch diese systematische Variation kann gezielt analysiert werden, ob und in welchem Ausmaß sich der Grad der strukturellen Überlappung auf die Lösungsdauer des Modells auswirkt. Die Pfade selbst werden dabei zufällig generiert, wobei das Skript sicherstellt, dass die vorgegebene Anzahl an Überschneidungen exakt eingehalten wird.
 \newline
-Bereits in vorangegangenen Tests konnte beobachtet werden, dass das Modell grundsätzlich korrekt arbeitet. Allerdings ergaben diese, dass die Laufzeiten exponentiell mit zunehmender Knotenzahl ansteigen. Insbesondere bei Instanzen mit mehr als 11 Knoten würden, je nach Komplexität der Pfade, rechenintensive Berechnungen mehrere Tage in Anspruch nehmen – was angesichts der vorgegebenen Zeitressourcen für die Abgabe nicht realisierbar ist. Deshalb wurde der erste Testabschnitt bewusst auf bis zu 11 Knoten begrenzt.\newline
+Bereits in vorangegangenen Tests konnte beobachtet werden, dass das Modell grundsätzlich korrekt arbeitet. Allerdings ergaben diese, dass die Laufzeiten sehr schnell mit zunehmender Knotenzahl ansteigen. Insbesondere bei Instanzen mit mehr als 11 Knoten würden, je nach Komplexität der Pfade, rechenintensive Berechnungen mehrere Tage in Anspruch nehmen – was angesichts der vorgegebenen Zeitressourcen für die im Rahmen dieser Arbeit nicht realisierbar ist. Deshalb wurde der erste Testabschnitt bewusst auf bis zu 11 Knoten begrenzt.\newline
 Diese experimentellen Testfälle ermöglichen es, sowohl die Skalierung des Modells als auch den Einfluss der Pfadkomplexität detailliert zu analysieren. Die gewonnenen Erkenntnisse fließen in die spätere Bewertung der Effizienz und Praxistauglichkeit des Optimierungsansatzes ein.
 
 \section{Auswertung der Ergebnisse}
@@ -403,7 +417,7 @@ Die Ergebnisse für Knotenzahlen von 5 bis 8 (vgl. Abbildung \ref{fig:Median5}) 
 \end{figure}
 Ein anderes Bild ergibt sich jedoch bei höheren Knotenzahlen von 9 bis 11. (vgl. Abbildung \ref{fig:Median9}). \newline
 Es ist zunächst eine kontinuierliche Zunahme der mittleren Laufzeit zu beobachten: Der Mittelwert steigt von etwas 24,36 Sekunden bei 9 Knoten über 43,54 Sekunden bei 10 Knoten auf beachtliche 4104,22 Sekunden bei 11 Knoten. Auch die Medianwerte spiegeln diesen Anstieg wider - sie liegen bei 37,75, 86,49 und 4129,85 Sekunden. Auffällig ist allerdings, dass sich bei 11 Knoten Median und Mittelwert fast exakt entsprechen. Dies könnte auf eine gleichmäßige Verteilung der Laufzeiten hinweisen - doch ein Blick auf die zugehörige Verteilung in Abbildung \ref{fig:Violin} widerlegt diese Annahme.\newline
-Der Violinplot für 11 Knoten zeigt eine extreme Streuung der Laufzeiten: Sie reichen von sehr kurzen Laufzeiten unter 200 Sekunden (z.B. 167,68 s und 163,75 s) bis hin zu Ausreißern im fünfstelligen Bereich (z.B. 8090,48 s und 11551,85 s). Diese deutliche Heterogenität innerhalb der Testfälle wird durch die symmetrischen Mittel- und Medianwerte verschleiert. Der Violinplot offenbart damit ein wesentlich realistischeres Bild der Komplexitätsunterschiede, die durch zufällig generierte Pfadstrukturen bei gleicher Knotenzahl entstehen können. \newline 
+Der Violinplot für 11 Knoten zeigt eine extreme Streuung der Laufzeiten: Sie reichen von sehr kurzen Laufzeiten unter 200 Sekunden (z.B. 167,68 s und 163,75 s) bis hin zu Ausreißern im hohen vierstelligen und fünfstelligen Bereichen (z.B. 8090,48 s und 11551,85 s). Diese deutliche Heterogenität innerhalb der Testfälle wird durch die symmetrischen Mittel- und Medianwerte verschleiert. Der Violinplot offenbart damit ein wesentlich realistischeres Bild der Komplexitätsunterschiede, die durch zufällig generierte Pfadstrukturen bei gleicher Knotenzahl entstehen können. \newline 
 \begin{figure}[H]
     \centering
     \begin{minipage}{0.48\textwidth}
@@ -441,33 +455,33 @@ Auch die zweite Abbildung \ref{fig:LaufAdj}, die die Laufzeit im Verhältnis zur
     \end{minipage}
 \end{figure}
 Insgesamt zeigen die Auswertungen, dass weder die Objektivwerte noch die Anzahl der gleichen adjazenter Knoten in einer eindeutigen Korrelation zu den Laufzeiten stehen. Die starke Streuung der Laufzeiten, selbst bei ähnlichen Werten in den untersuchten Parametern, deutet darauf hin, dass andere, bisher nicht berücksichtigte Faktoren einen größeren Einfluss auf die Laufzeit haben könnten.\newline 
-Um ein besseres Verständnis der großen Laufzeitunterschiede zwischen den einzelnen Testfällen zu gewinnen, werden im Folgenden vier ausgewählte Testfälle - nämlich 3,4,6 und 7 - im Detail betrachtet. Abbildung ... zeigt die resultierenden Einbettungen dieser Fälle. Die Auswahl basiert auf der zuvor festgestellten Streuung in den Laufzeiten trotz ähnlicher Objektivwerte und gleicher Anzahl gemeinsamer adjazenter Knoten. Durch die Analyse der finalen Einbettungen wird deutlich, dass insbesondere die Länge und Anzahl der verwendeten Kanten im resultierenden Graphen eine entscheidende Rolle für die Laufzeit spielen könnten.\newline 
+Um ein besseres Verständnis der großen Laufzeitunterschiede zwischen den einzelnen Testfällen zu gewinnen, werden im Folgenden vier ausgewählte Testfälle - nämlich 3,4,6 und 7 - im Detail betrachtet. Abbildung \ref{fig:gesamtabbildung} zeigt die resultierenden Einbettungen dieser Fälle. Die Auswahl basiert auf der zuvor festgestellten Streuung in den Laufzeiten trotz ähnlicher Objektivwerte und gleicher Anzahl gemeinsamer adjazenter Knoten. Durch die Analyse der finalen Einbettungen wird deutlich, dass insbesondere die Länge der Kanten, die mehr als eine Gitterkante nutzen und  die Anzahl dieser im resultierenden Graphen eine entscheidende Rolle für die Laufzeit spielen könnten.\newline 
 Ein Vergleich der Graphen aus Abbildung \ref{fig:gesamtabbildung}. verdeutlicht diesen Zusammenhang: Testfall 3 (Abbildung \ref{fig:teilbild_a}) weist eine Laufzeit von nur 31,22 Sekunden auf und enthält lediglich zwei Kanten der Länge 2 sowie eine einzige Kante der Länge 6. Testfall 4 (Abbildung~\ref{fig:teilbild_b}) zeigt mit fünf Kanten der Länge 2, einer Kante der Länge 3 und einer weiteren der Länge 6 bereits eine leicht erhöhte Komplexität und resultiert in einer Laufzeit von 45,44 Sekunden. Deutlich komplexer gestaltet sich die Einbettung bei Testfall 6 (Abbildung \ref{fig:teilbild_c}), mit mehreren Kanten höherer Länge – insbesondere zwei Kanten der Länge 3 sowie zwei der Länge 4 – was sich in einer Laufzeit von 145,99 Sekunden widerspiegelt. Noch ausgeprägter ist dieser Effekt bei Testfall 7 (Abbildung \ref{fig:teilbild_d}): Hier kommen zusätzlich zur vorherigen Struktur erneut längere Kanten hinzu, was zu einer nochmals erhöhten Laufzeit von 231,68 Sekunden führt.
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/Testfall3.png}
+        \includegraphics[width=\textwidth]{figures/Testfall3.pdf}
         \caption{Testfall 3}
         \label{fig:teilbild_a}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/Testfall4.png}
+        \includegraphics[width=\textwidth]{figures/Testfall4.pdf}
         \caption{Testfall 4}
         \label{fig:teilbild_b}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/Testfall6.png}
+        \includegraphics[width=\textwidth]{figures/Testfall6.pdf}
         \caption{Testfall 6}
         \label{fig:teilbild_c}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/Testfall7.png}
+        \includegraphics[width=\textwidth]{figures/Testfall7.pdf}
         \caption{Testfall 7}
         \label{fig:teilbild_d}
     \end{subfigure}
@@ -478,7 +492,7 @@ Ein Vergleich der Graphen aus Abbildung \ref{fig:gesamtabbildung}. verdeutlicht 
 
 
 Diese Beobachtungen legen nahe, dass nicht die Anzahl der verwendeten Gitterkanten, sondern insbesondere die Anzahl längerer Kanten – also solcher mit einer Länge größer als 1 – maßgeblichen Einfluss auf die benötigte Rechenzeit hat. Die resultierende Einbettungskomplexität erweist sich damit als zentraler Einflussfaktor auf die Laufzeit, was durch die zusätzliche Übersicht in Tabelle \ref{tab:tabpa} über alle Testfälle mit Knotenzahl 10 gestützt wird.\newline 
-Insgesamt zeigt sich, dass die Laufzeit nicht durch aggregierte Merkmale wie Objektivwert oder Knoteneigenschaften erklärbar ist, sondern vielmehr durch die konkrete geometrische Ausprägung der Pfade im Gitter beeinflusst wird. Die Komplexität der Einbettung selbst – insbesondere gemessen an der Anzahl und Länge der genutzten Gitterkanten – steht somit in klarer Korrelation zur benötigten Rechenzeit.\newline 
+Insgesamt zeigt sich, dass die Laufzeit nicht durch aggregierte Merkmale wie Objektivwert oder Knoteneigenschaften erklärbar ist, sondern vielmehr durch die konkrete geometrische Ausprägung der Pfade im Gitter beeinflusst wird. Die Komplexität der Einbettung selbst – insbesondere gemessen an der Anzahl und Länge von Kanten, die mehrere Gitterkanten nutzen – steht somit in klarer Korrelation zur benötigten Rechenzeit.\newline 
 
 
 \begin{longtable}{|c|c|c|}
@@ -528,11 +542,11 @@ Obwohl die Korrelation zwischen der Anzahl gleicher Knoten und der Laufzeit nich
 \section{Diskussion der Ergebnisse}
 Die durchgeführten Experimente zeigen deutlich, dass das entwickelte Modell für kleinere Eingaben äußerst effizient arbeitet. Bei moderaten Knotenzahlen und kompakten Gittergrößen lassen sich selbst mehrere zufällig generierte Testfälle in sehr kurzer Zeit lösen. Das Modell liefert dabei konsistente Ergebnisse mit stabilen Laufzeiten, was auf eine robuste Formulierung und effektive Lösbarkeit im kleineren Maßstab hinweist.\newline 
 Mit zunehmender Komplexität der Eingabeinstanzen – insbesondere bei wachsender Knotenzahl und entsprechend erforderlicher Gittervergrößerung – steigt die Rechenzeit jedoch stark an. Die Auswertungen belegen, dass dieser Anstieg nicht nur auf die wachsende Modellgröße (in Form von Variablen und Nebenbedingungen) zurückzuführen ist, sondern auch auf die strukturelle Komplexität der resultierenden Einbettung. Größere Knotenanzahlen erhöhen die Wahrscheinlichkeit für komplexe Pfadverläufe und lange Kanten, wodurch die Lösungsfindung erheblich erschwert wird.\newline 
-Ab einer bestimmten Problemgröße, insbesondere jenseits von 10 bis 12 Knoten, ist das Modell nicht mehr in vertretbarer Zeit lösbar. Die Laufzeit wächst exponentiell und macht eine Anwendung für größere Instanzen im Praxiseinsatz aktuell nicht realistisch. Insgesamt lässt sich festhalten, dass das Modell zwar korrekt funktioniert und konsistente Ergebnisse liefert, jedoch in seiner derzeitigen Form nicht für großskalige Probleme skaliert.
+Ab einer bestimmten Problemgröße, insbesondere jenseits von 10 bis 12 Knoten, ist das Modell nicht mehr in vertretbarer Zeit lösbar. Die Laufzeit wächst sehr schnell und macht eine Anwendung für größere Instanzen im Praxiseinsatz aktuell nicht realistisch. Insgesamt lässt sich festhalten, dass das Modell zwar korrekt funktioniert und konsistente Ergebnisse liefert, jedoch in seiner derzeitigen Form nicht für großskalige Probleme skaliert.
 
 
 \chapter{Fazit und Ausblick}
-Die experimentellen Ergebnisse haben gezeigt, dass das Modell für kleine bis mittlere Instanzgrößen zuverlässige und schnelle Ergebnisse liefert. Besonders bei Knotenzahlen bis etwa 8 und entsprechend klein gewählten Gittergrößen gelingt es, selbst komplexere Testfälle innerhalb weniger Sekunden zu lösen. Die Laufzeiten sind dabei stabil und gut prognostizierbar. Ab einer Knotenzahl von etwa 12 hingegen steigt die Rechenzeit drastisch an – teils bis in den Stunden- oder gar Tagesbereich. In diesen Fällen ist das Modell in der aktuellen Form nicht mehr praxistauglich. Die Ursache liegt sowohl in der wachsenden Modellgröße durch größere Gitter (mehr Variablen und Nebenbedingungen), als auch in der gestiegenen strukturellen Komplexität der resultierenden Einbettung, die durch überlappende und lange Pfade entsteht.\newline 
+Die experimentellen Ergebnisse haben gezeigt, dass das Modell für kleine Instanzgrößen zuverlässige und schnelle Ergebnisse liefert. Besonders bei Knotenzahlen bis etwa 8 und entsprechend klein gewählten Gittergrößen gelingt es, selbst komplexere Testfälle innerhalb weniger Sekunden zu lösen. Die Laufzeiten sind dabei stabil und gut prognostizierbar. Ab einer Knotenzahl von etwa 12 hingegen steigt die Rechenzeit drastisch an – teils bis in den Stunden- oder gar Tagesbereich. In diesen Fällen ist das Modell in der aktuellen Form nicht mehr praxistauglich. Die Ursache liegt sowohl in der wachsenden Modellgröße durch größere Gitter (mehr Variablen und Nebenbedingungen), als auch in der gestiegenen strukturellen Komplexität der resultierenden Einbettung, die durch überlappende und lange Pfade entsteht.\newline 
 Diese Beobachtungen machen deutlich, dass das Modell zwar konzeptionell korrekt arbeitet, aber in seiner jetzigen Form nicht ausreichend skaliert, um größere Probleminstanzen effizient zu lösen.\newline
 Um die praktische Anwendbarkeit des Modells zu verbessern, bieten sich verschiedene Optimierungsansätze an. Eine vielversprechende Alternative zur exakten Modellierung stellen heuristische  Verfahren dar, wie etwa Greedy-Ansätze oder Simulated Annealing. Mit ihnen lassen sich in akzeptabler Zeit gute Näherungslösungen für größere Instanzen finden. Diese Lösungen können als obere Schranke für das exakte Modell dienen: Kennt man bereits eine gültige, aber nicht optimale Einbettung mit bekanntem Zielfunktionswert, so lassen sich während der Lösungssuche alle Zwischenlösungen verwerfen, deren Kosten diese Schranke überschreiten. Dadurch kann der Suchraum deutlich eingeschränkt und die Laufzeit reduziert werden. Ergänzend hierzu bieten sich Verfahren der Problemvorverarbeitung an, um die Eingabeinstanz bereits vor der eigentlichen Modelllösung effizient zu vereinfachen. Durch gezielte Graphvereinfachung, Symmetrieerkennung oder Clustering lassen sich unnötige Redundanzen im Gittermodell vorab eliminieren und die Rechenzeit deutlich senken.\newline
 Ein weiterer Vorteil des entwickelten Modells liegt in seiner Flexibilität. Die Grundstruktur lässt sich relativ leicht auf andere Anwendungsfälle übertragen oder erweitern. So könnten beispielsweise statt zwei auch drei oder mehr Hamiltonpfade betrachtet werden, um komplexere Szenarien abzubilden. Ebenso wären spezielle Einbettungsanforderungen denkbar – etwa das Erzwingen bestimmter Teilstrukturen, symmetrischer Verläufe oder die Minimierung von Kantenüberschneidungen. Die zugrunde liegende Formulierung ist dabei modular genug aufgebaut, um solche Anpassungen mit vertretbarem Aufwand zu realisieren.\newline 

@@ -1,0 +1,60 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\begin{document}
+
+\begin{tikzpicture}[
+  every node/.style={circle, fill=black, inner sep=1pt, minimum size=4pt}
+]
+  \node[label={[gray, scale=0.5]above:$v_1$}] (a) at (0,3) {};
+  \node (b)[label={[gray, scale=0.5]above:$v_3$}] at (1,3) {};
+  \node (c) at (2,3) {};
+  \node (d) at (3,3) {};
+  \node[label={[gray, scale=0.5]left:$v_2$}] (e) at (0,2) {};
+  \node (f) at (1,2) {};
+  \node (g) at (2,2) {};
+  \node (h) at (3,2) {};
+  \node (i) at (0,1) {};
+  \node (j) at (1,1) {};
+  \node (k) at (2,1) {};
+  \node (l) at (3,1) {};
+  \node (m) at (0,0) {};
+  \node (n) at (1,0) {};
+  \node (o) at (2,0) {};
+  \node (p) at (3,0) {};
+
+
+  \draw (a) edge[->, violet](b);
+  \draw (b) edge[-](c);
+  \draw (c) edge[-](d);
+  \draw (d) edge[-](h);
+  \draw (h) edge[-](l);
+  
+  \draw (k) edge[-](j);
+  \draw (j) edge[-](i);
+  \draw (i) edge[-](e);
+
+  \draw (a) edge[->, magenta](e);
+  \draw (f) edge[-](g);
+  \draw (g) edge[-](k);
+  \draw[->, magenta] (e) to[bend left=10] (f);
+  \draw[->, magenta] (f) to[bend left=10] (b);
+  \draw[->, violet] (f) to[bend left=10] (e);
+  \draw[<-, violet] (f) to[bend right=10] (b);
+
+  \draw (k) edge[-](l);
+  \draw (c) edge[-](g);
+  \draw (g) edge[-](h);
+  \draw (f) edge[-](j);
+  
+  \draw (i) edge[-](m);
+  \draw (j) edge[-](n);
+  \draw (k) edge[-](o);
+  \draw (l) edge[-](p);
+  \draw (m) edge[-](n);
+  \draw (n) edge[-](o);
+  \draw (o) edge[-](p);
+
+\end{tikzpicture}
+
+\end{document}
